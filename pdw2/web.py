@@ -2,9 +2,9 @@ from flask import Flask
 from flaskext.genshi import Genshi
 from flaskext.genshi import render_response
 
-from PDC.Bibliographica import Bibliographica, load
-from PDC.CalculatorUK import CalculatorUK
-from PDC.CalculatorBase import Work
+from pdcalc.Bibliographica import Bibliographica, load
+from pdcalc.CalculatorUK import CalculatorUK
+from pdcalc.Work import Work
 from data import W
 
 app = Flask(__name__)
