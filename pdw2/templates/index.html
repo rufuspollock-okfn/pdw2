@@ -1,25 +1,17 @@
-<html xmlns:py="http://genshi.edgewall.org/">
-  <head>
-  	  <link rel="stylesheet" href="./static/style/pdw.css"/>
-	  <title>$title</title>
-  </head>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
 
-  <body class="index">
-    <div id="header">
-      <h1>$title</h1>
-    </div>
-
-    <p>Welcome!</p>
-
-<ul py:if="results">
-	<li py:for="r in results">
-	<img class="li" src="./static/img/${r.status}.png"/>${r.author}: <b>${r.title}</b>
-	</li>
-</ul>
-
-    <div id="footer">
-      <hr />
-      <p class="legalese">(c) 2011 OKFN</p>
-    </div>
-  </body>
-</html>
+{% block content %}
+    <section>
+      <div class="primary">
+        <h2>Welcome!</h2>
+        <p>Public Domain Works is an <a href="http://opendefinition.org/">open</a> registry of cultural works that are in the public domain.
+        </p>
+        <p>It also provides a web API for calculating public domain status of works.</p>
+      </div>
+      <div class="secondary">
+        <h2>Search our database</h2>
+        <p>Returning soon!</p>
+      </div>
+    </section>
+{% endblock %}

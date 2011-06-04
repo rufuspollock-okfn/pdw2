@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block head %}
+  <!-- Prevent the conditional comments from stalling page load -->
+  <!--[if IE]><![endif]-->
+
+  <title>{% block title %}{% endblock %} - Public Domain Works</title>
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href='http://fonts.googleapis.com/css?family=Arvo:regular,bold&amp;subset=latin' rel='stylesheet' />
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin' rel='stylesheet' />
+  <link rel="stylesheet" href="/static/css/style.css">
+  {% endblock %}
+</head>
+<body>
+  <div id="airlock">
+    <header>
+      {% block masthead %}
+      <h1>
+        <a href="{{url_for('.home')}}" title="The Public Domain Works Homepage">
+          Public Domain Works</a>
+      </h1>
+      <nav>
+        <ul>
+          <li><a href="{{url_for('api_index')}}">API</a></li>
+          <li><a href="{{url_for('.home')}}#about">About</a></li>
+        </ul>
+      </nav>
+      {% endblock %}
+    </header>
+
+    <article>
+      {% block content %}{% endblock %}
+    </article>
+
+    <footer>
+      {% block footer %}
+      <p>Developed by the
+        <img src="http://assets.okfn.org/images/logo/okf_logo_white_and_green_tiny.png" id="footer-okf-logo" />
+        <a href="http://okfn.org">Open
+        Knowledge Foundation</a> with support from the <a
+        href="http://www.shuttleworthfoundation.org/">Shuttleworth
+        Foundation</a>.</p>
+      <div class="widget-area">
+        <ul class="xoxo">
+          <li class="widget-container widget_text">
+          <h3 class="widget-title"></h3>
+          <div class="text-widget">
+            <ul>
+              <li>
+                &copy; <a href="http://www.okfn.org/">Open Knowledge Foundation</a>
+              </li>
+              <li>
+                <a href="http://opendefinition.org/okd/" class="img">
+                <img alt="This Content and Data is Open" src="http://assets.okfn.org/images/ok_buttons/oc_80x15_blue.png" class="button" />
+                </a>
+              </li>
+              <li>
+                <a href="http://opendefinition.org/ossd/" class="img">
+                <img alt="This Content and Data is Open"
+                  src="http://assets.okfn.org/images/ok_buttons/os_80x15_orange_grey.png" class="button" />
+                </a>
+              </li>
+            </ul>
+          </div>
+          </li>
+        </ul>
+        <ul class="xoxo">
+          <li class="widget-container widget_text">
+          <h3 class="widget-title"></h3>
+          <div class="textwidget">
+            <ul>
+              <li>
+                <a href="http://okfn.org/projects/pdw/">Project Home Page</a>
+              </li>
+              <li>
+                <a href="{{url_for('api_index')}}">API</a>
+              </li>
+              <li>
+                <a href="http://okfn.org/contact/">Contact Us</a>
+              </li>
+              <li>
+                <a href="http://okfn.org/privacy-policy/">Privacy Policy</a>
+              </li>
+            </ul>
+          </div>
+          </li>
+        </ul>
+      </div>
+      {% endblock %}
+    </footer>
+  </div>
+</body>
+</html>

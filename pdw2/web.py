@@ -1,21 +1,22 @@
-from flask import Flask
-from flaskext.genshi import Genshi
-from flaskext.genshi import render_response
+from flask import Flask, jsonify, render_template
 
-from pdcalc.Bibliographica import Bibliographica, load
-from pdcalc.CalculatorUK import CalculatorUK
-from pdcalc.Work import Work
-from data import W
+from pdcalc.bibliographica import Bibliographica, load
+from pdcalc.uk import CalculatorUK
+from pdcalc.work import Work
 
 app = Flask(__name__)
-genshi = Genshi(app)
-
-@app.route("/ciao")
-def ciao():
-    return "ciao"
+# genshi = Genshi(app)
 
 @app.route("/")
-def index():
+def home():
+    return render_template('index.html')
+
+@app.route("/api")
+def api_index():
+    return jsonify({'abc': 1})
+
+@app.route("/bibliographica")
+def bibliographica():
     return req("shakespeare")
 
 @app.route("/<id>")
@@ -32,7 +33,7 @@ def req(id):
 	w = W(", ".join([author.name for author in work.authors]), work.title, status)
 	results.append(w)
 
-    return render_response('index.html', dict(title=title, results=results))
+    return render_template('index.html', dict(title=title, results=results))
 
 
 if __name__ == "__main__":
