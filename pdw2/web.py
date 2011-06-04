@@ -1,7 +1,10 @@
-from flask import Flask, jsonify, render_template, json
+from flask import Flask, jsonify, render_template, json, request
 
-from pdcalc.uk import CalculatorUK
-from pdcalc.work import Work
+import pdcalc
+# import these so they register themselves
+import pdcalc.fr
+import pdcalc.uk
+import pdcalc.work
 
 app = Flask(__name__)
 # genshi = Genshi(app)
@@ -13,30 +16,57 @@ def home():
 @app.route("/api")
 def api_index():
     example = {
-        "type": "text",
-        "date" : "1903-01-01",
-        "persons" : [
+        "title": "Oliver Twist",
+        "type": "literary",
+        "date" : "19030101",
+        "authors" : [
             {
                 "type" : "person",
-                "birth_date" : "1849-01-01",
-                "death_date" : "None"
+                "birth_date" : "18490101",
             }
         ]
     }
     example_json = json.dumps(example, indent=2)
     example_query = 'jurisdiction=fr&work=' + json.dumps(example)
     return render_template('api.html', example=example_json,
-            example_query=example_query)
+            example_query=example_query, work_types=pdcalc.work.WORK_TYPES)
 
 @app.route("/api/pd")
 def api_pd():
-    return jsonify({'abc': 1})
+    # TODO: proper validation (e.g. with colander)
+    if not 'jurisdiction' in request.args or not 'work' in request.args:
+        return jsonify({
+            'error': 'Missing jurisdiction or work parameter'
+            })
+    jurisdiction = request.args['jurisdiction']
+    workdata = json.loads(request.args['work'])
+    calculator = pdcalc.get_calculator(jurisdiction)
+    if calculator is None:
+        return jsonify({
+            'error': 'No calculator for that jurisdiction'
+            })
+    work = pdcalc.work.Work(workdata)
+    try:
+        status = calculator.get_status(work)
+    except Exception, inst:
+        if app.debug:
+            raise
+        return jsonify({
+            'error': '%s' % inst
+            })
+
+    return jsonify({
+        jurisdiction: {
+            'pd': status,
+            'assumptions': calculator.assumptions
+            }
+        })
 
 @app.route("/bibliographica")
 def bibliographica():
     return req("shakespeare")
 
-@app.route("/<id>")
+@app.route("/req/<id>")
 def req(id):
     from pdcalc.bibliographica import Bibliographica, load
     title = "Public Domain Works"
