@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}API{% endblock %}
+
+{% block content %}
+  <section>
+    <h2>Public Domain Works API</h2>
+
+    <p>We provide a PD calculator API. This API enables you to calculate
+    the public domain status of a work.</p>
+
+    <p>The API is located at: <a
+      href="/api/pd">/api/pd</a></p>
+    <p>To make a query to the api you should provide 3 parameters:</p>
+    <ul>
+      <li>when: the time (year) at which to calculate public domain status. E.g. 1960 would mean calculate public domain status of this work in 1960.</li>
+      <li>jurisdiction: the country for which to calculate public domain status as ISO 3166 2 digit code. Currently we support 'fr', 'gb' (uk), 'us', 'ca'.</li>
+      <li>work: details of the work to perform the calculation for in json format -- more details below.</li>
+    </ul>
+
+    <p>The return data will be a dictionary in JSON format keyed by jurisdiction with each jurisdiction containing a pd status result (see below).</p>
+    <p>It is also permissible to provide a callback parameter for JSONP support.</p>
+
+    <p><strong>Example query</strong></p>
+    <p><a
+      href='/api/pd?{{example_query}}'>/api/pd?{{example_query}}</a></p>
+
+    <h3>PD Status Result</h3>
+    <pre>
+{
+  "pd": 0 or 1
+  "messages": ...
+}
+    </pre>
+
+
+    <h3>A Work</h3>
+    <p>Example:</p>
+    <pre>{{example}}</pre>
+
+    <p>Specification:</p>
+    <ul>
+      <li>title</li>
+      <li>type: one of 'text', 'composition', 'photograph', 'law'</li>
+      <li>date: Publication date <strong>(*)</strong></li>
+      <li>creation_date: if different than the edition you want to check</li>
+      <li>persons: persons involved in this work <strong>(*)</strong>
+    </ul>
+
+    <h3>Persons</h3>
+    <p>A person should have the following attributes:</p>
+    <ul>
+      <li>name: full name</li>
+      <li>country: Country of birth in ISO 3166 format</li>
+      <li>type: person or organization.</li>
+      <li>death_date (or birth_date if death date not available)</li> 
+    </ul>
+{% endblock %}
