@@ -106,9 +106,6 @@ code {
 
 form {
 	margin-bottom: 1.8em;
-	background-color: #fafafa;
-	border: 1px solid #e6e6e6;
-	padding: 0.5em;
 }
 
 form dl,
@@ -129,11 +126,9 @@ form label {
 }
 
 form input {
-	width: 360px;
 	border: 1px solid #e6e6e6;
-	font-size: 1em /* 16px */;
+	font-size: 1.6em;
 	padding: 0.3125em /* 5px */ 0.1875em /* 3px */;
-	display: block;
 }
 
 form .actions {
@@ -505,3 +500,12 @@ ul.notification li.error {
   border-bottom-color: #ccc;
   color: #b50000;
 }
+
+/**************************************
+  * Extras
+  *************************************/
+
+form input.search {
+  width: 300px;
+}
+

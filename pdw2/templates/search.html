@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+
+{% block content %}
+  <section>
+    <h2>Search the Public Domain</h2>
+    <p>Warning: the PD database is currently being rebuilt and may not yield
+    accurate results.</p>
+    {{ search_form() }}
+
+    {% if q %}
+    <div class="list">
+      <h3>Results</h3>
+      <p>{{count}} works found.</p>
+
+      <ul>
+      {% for work in works %}
+        <li>
+          {{work['title'][0]}}
+          by
+          <em>
+          {% if not work.get('contributor', []) %}
+          Unknown
+          {% endif %}
+          {% for c in work.get('contributor', []) %}
+          {{c}}
+          {% endfor %}
+          </em>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </section>
+{% endblock %}

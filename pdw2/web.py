@@ -5,6 +5,7 @@ import pdcalc
 import pdcalc.fr
 import pdcalc.uk
 import pdcalc.work
+import solr
 
 app = Flask(__name__)
 # genshi = Genshi(app)
@@ -12,6 +13,17 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return render_template('index.html')
+
+@app.route("/search")
+def search():
+    s = solr.SolrConnection('http://solr.okfn.org/solr/bibliographica.org')
+    q = request.args.get('q', '')
+    works = []
+    if q:
+        response = s.query(q)
+        works = response.results
+        count = response.numFound
+    return render_template('search.html', q=q, works=works, count=count)
 
 @app.route("/api")
 def api_index():

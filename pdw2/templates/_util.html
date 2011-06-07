@@ -1,0 +1,8 @@
+{% macro search_form() %}
+    <form action="{{url_for('search')}}" method="GET">
+      <input type="text" name="q" value="{{q}}" placeholder="Search ...." class="search"/>
+      <input type="submit" value="Search &raquo;" />
+    </form>
+{% endmacro %}
+
+
