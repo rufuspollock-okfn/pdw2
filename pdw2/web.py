@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, render_template, json, request
+import urllib2
 
 import pdcalc
 # import these so they register themselves
 import pdcalc.fr
 import pdcalc.uk
 import pdcalc.work
+from pdcalc.bibliographica import Bibliographica
 import solr
 
 app = Flask(__name__)
@@ -16,13 +18,36 @@ def home():
 
 @app.route("/search")
 def search():
-    s = solr.SolrConnection('http://solr.okfn.org/solr/bibliographica.org')
     q = request.args.get('q', '')
+    page = request.args.get('page', '0')
     works = []
     if q:
-        response = s.query(q)
-        works = response.results
-        count = response.numFound
+        base_url = "http://bibliographica.org/search.json?q=%s&page=%s"
+        target_url = base_url % (q, page)
+        data = urllib2.urlopen(target_url).read()
+        solrdata = json.loads(data)
+        response = solrdata['response']
+        data = response["docs"]
+        works = []
+        for item in data:
+            uri = item["uri"].replace("<", "").replace(">", "")
+            d = urllib2.urlopen(uri + ".json").read();
+            item["work"] = json.loads(d)
+            out = Bibliographica(item).data
+            work = pdcalc.work.Work(out)
+            work.uri = uri
+            try:
+                result = pdcalc.get_pd_status(work)
+                work.pd_status = {'error': '', 'results': result}
+            except Exception, inst:
+                if app.debug:
+                    raise
+                work.pd_status = {
+                    'error': 'Failed to calculate status: %s' % inst,
+                    'results': []
+                    }
+            works.append(work)
+        count = response['numFound']
     return render_template('search.html', q=q, works=works, count=count)
 
 @app.route("/api")
@@ -43,6 +68,7 @@ def api_index():
     return render_template('api.html', example=example_json,
             example_query=example_query, work_types=pdcalc.work.WORK_TYPES)
 
+
 @app.route("/api/pd")
 def api_pd():
     # TODO: proper validation (e.g. with colander)
@@ -52,27 +78,20 @@ def api_pd():
             })
     jurisdiction = request.args['jurisdiction']
     workdata = json.loads(request.args['work'])
-    calculator = pdcalc.get_calculator(jurisdiction)
-    if calculator is None:
+    if jurisdiction not in pdcalc.calculators:
         return jsonify({
             'error': 'No calculator for that jurisdiction'
             })
     work = pdcalc.work.Work(workdata)
     try:
-        status = calculator.get_status(work)
+        result = pdcalc.get_pd_status(work)
     except Exception, inst:
         if app.debug:
             raise
         return jsonify({
             'error': '%s' % inst
             })
-
-    return jsonify({
-        jurisdiction: {
-            'pd': status,
-            'assumptions': calculator.assumptions
-            }
-        })
+    return jsonify(result)
 
 @app.route("/bibliographica")
 def bibliographica():

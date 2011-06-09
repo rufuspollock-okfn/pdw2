@@ -6,26 +6,43 @@
     <h2>Search the Public Domain</h2>
     <p>Warning: the PD database is currently being rebuilt and may not yield
     accurate results.</p>
-    {{ search_form() }}
+    {{ search_form(q) }}
 
     {% if q %}
-    <div class="list">
+    <div class="search-results">
       <h3>Results</h3>
       <p>{{count}} works found.</p>
 
-      <ul>
+      <ul class="work-list">
       {% for work in works %}
         <li>
-          {{work['title'][0]}}
+          <a href="{{work.uri}}">{{work.title[0]}}</a>
           by
           <em>
-          {% if not work.get('contributor', []) %}
+          {% if not work.authors %}
           Unknown
           {% endif %}
-          {% for c in work.get('contributor', []) %}
-          {{c}}
+          {% for c in work.authors %}
+          {{c.name}}
           {% endfor %}
           </em>
+          <div class="pd-status">
+            <h3>Public Domain Status:</h3>
+            <ul>
+              {% for jurisdiction in work.pd_status.results %}
+              {% set status = 'yes' if work.pd_status.results[jurisdiction]['pd'] else 'no' %}
+              <li class="pd-status-info pd-{{status}}"> 
+                {{jurisdiction}}
+                <img class="pd-icon" src="/static/img/{{status}}.png"
+                  title="{{work.pd_status.results[jurisdiction]['assumptions']}}"
+                />
+                <div class="explanation">
+                  {{work.pd_status.results[jurisdiction]['assumptions']}}
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+          </div>
         </li>
       {% endfor %}
       </ul>
