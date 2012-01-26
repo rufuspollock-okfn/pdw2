@@ -13,7 +13,9 @@
     <p>To make a query to the api you should provide 3 parameters:</p>
     <ul>
       <li>when: the time (year) at which to calculate public domain status. E.g. 1960 would mean calculate public domain status of this work in 1960.</li>
-      <li>jurisdiction: the country for which to calculate public domain status as ISO 3166 2 digit code. Currently we support 'fr', 'gb' (uk), 'us', 'ca'.</li>
+      <li>jurisdiction: the country for which to calculate public domain status as ISO 3166 2 digit code. Currently we support:
+          'austria', 'belgium', 'bulgaria', 'cyprus', 'czech', 'denmark', 'estonia', 'finland', 'france', 'germany'
+      </li>
       <li>work: details of the work to perform the calculation for in json format -- more details below.</li>
     </ul>
 
@@ -40,18 +42,15 @@
     <p>Specification:</p>
     <ul>
       <li>title</li>
-      <li>type: one of {{work_types}}</li>
-      <li>date: Publication date <strong>(*)</strong></li>
+      <li>issued: Publication date <strong>(*)</strong></li>
       <li>creation_date: if different than the edition you want to check</li>
-      <li>persons: persons involved in this work <strong>(*)</strong>
+      <li>authors: persons involved in this work <strong>(*)</strong>
     </ul>
 
     <h3>Persons</h3>
     <p>A person should have the following attributes:</p>
     <ul>
       <li>name: full name</li>
-      <li>country: Country of birth in ISO 3166 format</li>
-      <li>type: person or organization.</li>
-      <li>death_date (or birth_date if death date not available)</li> 
+      <li>death (or birth if death date not available)</li> 
     </ul>
 {% endblock %}
