@@ -7,4 +7,4 @@ execfile(activate_this, dict(__file__=activate_this))
 from web import app as application
 
 import sys
-sys.path.insert(0, os.path.join(base_path, "pdw2")
+sys.path.insert(0, os.path.join(base_path, "pdw2"))
