@@ -11,64 +11,35 @@
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.2/css/font-awesome.min.css" rel="stylesheet">
+
   <link href='http://fonts.googleapis.com/css?family=Arvo:regular,bold&amp;subset=latin' rel='stylesheet' />
   <link href='http://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin' rel='stylesheet' />
-  <link rel="stylesheet" href="/static/css/okfn_footer.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+<!--<link rel="stylesheet" href="/static/css/style.css">-->
   <link rel="stylesheet" href="/static/css/pdw.css">
-  <link rel="stylesheet" href="/static/css/style_mmo.css">
-  <link rel="stylesheet" href="/static/css/magic-bootstrap.css">
   {% endblock %}
 </head>
 <body>
   <div id="airlock">
     <header>
       {% block masthead %}
-      <div class="jumbotron">
-        <div class="container">
-          <h1>
-            <!--<a href="{{url_for('.home')}}" title="The Public Domain Works Homepage">-->
-              Public Domain Works<!--</a>-->
-          </h1>
-        </div>
-      </div>
-      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{{url_for('.home')}}">Public Domain Works</a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-              <li>
-                <a href="http://publicdomain.okfn.org/calculators/"><i class="fa fa-home fa-fw"></i>Project Home Page</a>
-              </li>
-              <li>
-                <a href="{{url_for('api_index')}}"><i class="fa fa-gears fa-fw"></i>API</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/contact/"><i class="fa fa-envelope fa-fw"></i>Contact Us</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/privacy-policy/"><i class="fa fa-info-circle fa-fw"></i>Privacy Policy</a>
-              </li>
-            </ul>
-        </div>
+      <h1>
+        <a href="{{url_for('.home')}}" title="The Public Domain Works Homepage">
+          Public Domain Works</a>
+      </h1>
+      <nav>
+        <ul>
+          <li><a href="{{url_for('api_index')}}">API</a></li>
+        </ul>
       </nav>
       {% endblock %}
     </header>
 
-    <article class="container">
+    <article>
       {% block content %}{% endblock %}
     </article>
 
-    <footer class="container">
+    <footer>
       {% block footer %}
       <p>Developed by the
         <img src="http://assets.okfn.org/images/logo/okf_logo_white_and_green_tiny.png" id="footer-okf-logo" />
@@ -126,6 +97,5 @@
       {% endblock %}
     </footer>
   </div>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,76 @@
+
+footer {
+	font-size: 1.4em;
+	background-color: #fafafa;
+	border: 1px solid #e6e6e6;
+	padding: 1em 0.5em;
+  margin-top: 2em;
+	margin-bottom: 3em;
+  line-height: 1.4;
+  clear: both;
+}
+
+footer,
+footer a {
+	-webkit-transition: color 0.05s ease-in;
+	-moz-transition: color 0.05s ease-in;
+	-o-transition: color 0.05s ease-in;
+	transition: color 0.05s ease-in;
+	color: rgba(0, 0, 0, 0.4);
+}
+
+footer:hover,
+footer:hover a {
+	color: rgba(0, 0, 0, 0.8);
+}
+
+footer:hover {
+	color: rgba(0, 0, 0, 0.8);
+}
+
+footer img {
+  display: inline;
+  border: none;
+}
+
+#footer-okf-logo {
+  margin-bottom: -2px;
+}
+
+footer img.button {
+  margin-bottom: -2px;
+}
+
+footer ul.xoxo, footer p {
+  margin-bottom: 1.2em;
+}
+
+
+footer .widget-area ul {
+  padding-left: 0;
+}
+
+footer .widget-area ul li {
+  display: inline;
+}
+
+footer .widget-area ul li::after {
+	display: inline-block;
+	padding: 0 0.5em;
+	content: "/";
+}
+
+footer .widget-area ul li:last-of-type::after {
+	display: none;
+}
+
+footer .widget-area div,
+footer .widget-area .text-widget ul {
+  display: inline;
+}
+
+footer .widget-area h3 {
+  display: inline;
+  font-size: 1.3em;
+  font-weight: bold;
+}

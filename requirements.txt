@@ -1,2 +1,1 @@
 Flask==0.6.1
--e hg+https://bitbucket.org/okfn/pdcalc#egg=pdcalc
