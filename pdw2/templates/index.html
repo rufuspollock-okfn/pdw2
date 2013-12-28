@@ -79,51 +79,20 @@ $(function(){
 });
 </script>
 <section>
-    <h2>Welcome!</h2>
+    <h2>Bienvenue!</h2>
 	<div class="primary col-xs-5" >
 		<p>
-		Public Domain Works is a repository of works that have entered the public domain. You can search for works that are in the public domain in any given jurisdiction, or browse public domain works by categories. Public Domain Works is powered by the <a href="http://publicdomain.okfn.org/calculators">Public Domain Calculators</a>, a tool that determines the public domain status of a work based on bibliographic metadata<br/>
-		</p>
-        <p>Public Domain Works also provides a web <a href="http://publicdomainworks.net/api">API</a> for calculating public domain status of works.</p>
+		Les calculateurs du domaine public visent à faciliter la compréhension du statut juridique d’une oeuvre et établir, pour un pays donné, si elle déjà est dans le domaine public. La connaissance du statut juridique des oeuvres ou de leurs copies numériques est primordiale au développement de nouveaux services qui réutilisent et valorisent le domaine public.</p>
+		nouveaux services qui réutilisent et valorisent le domaine public.<br/></p>
+<iframe src="//player.vimeo.com/video/78740619" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 	</div>
 	<div class="secondary col-xs-5 col-md-offset-2">
-		<p>Try the public domain calculators:</p>
+		<p>Essayer le calculateur:</p>
 		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-globe fa-fw"></i>Select your jurdisdiction:</span>
-			<select name="jurisdiction" id="jurisdiction" class="col-xs-6">
-			<!--<option>austria</option>
-			<option>belgium</option>
-			<option>bulgaria</option>
-			<option>cyprus</option>
-			<option>czech</option>
-			<option>denmark</option>
-			<option>estonia</option>
-			<option>finland</option>
-			<option>france</option>
-			<option>germany</option>
-			<option>greece</option>
-			<option>hungary</option>
-			<option>iceland</option>
-			<option>ireland</option>
-			<option>italy</option>
-			<option>latvia</option>
-			<option>lithuania</option>
-			<option>luxembourg</option>
-			<option>malta</option>
-			<option>netherlands</option>
-			<option>norway</option>
-			<option>poland</option>
-			<option>portugal</option>
-			<option>romania</option>
-			<option>slovakia</option>
-			<option>spain</option>
-			<option>sweden</option>
-			<option>switzerland</option>
-			<option>uk</option>-->
-			</select>
+			<input type="hidden" name="jurisdiction" id="jurisdiction" class="col-xs-6" value="france/BNF">
 		</p>
 		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-link fa-fw"></i>Paste your metadata url:</span>
+			<span class="col-xs-6"> <i class="fa fa-link fa-fw"></i>Coller les métadonnées bibiographiques ici:</span>
 			<input type="text" name="work" id="work" class="col-xs-6">
 			<!--<select name="number" id="number">
 			<option>2</option>
@@ -138,22 +107,22 @@ $(function(){
 			</select>-->
 		</p>
 		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-question fa-fw"></i>Sample data urls:</span>
+			<span class="col-xs-6"> <i class="fa fa-question fa-fw"></i>Example de métadonnées:</span>
 			<a class="sample_url" data-url="http://data.bnf.fr/15533097/2046___film/rdf.xml" data-jurisdiction="france/bnf">2046 - Wong Kar Wai - Bnf France</a>
 		</p>
 		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-signal fa-fw"></i>Select detail level:</span>
+			<span class="col-xs-6"> <i class="fa fa-signal fa-fw"></i>Sélectionnez le niveau de details pour la réponse:</span>
 			<select name="detail" id="detail" class="col-xs-6">
-				<option value="low" >low</option>
-				<option value="medium">medium</option>
-				<option value="high">high</option>
+				<option value="low" >faible</option>
+				<option value="medium">moyen</option>
+				<option value="high">élevés</option>
 			</select>
 		</p>
 		<p class="row">
-			<button type="button" name="submit" value="Calculate!" id="submit" class="btn btn-info col-xs-12" >Calculate!</button>
+			<button type="button" name="submit" value="Calculate!" id="submit" class="btn btn-info col-xs-12" >Calculer!</button>
 		</p>
 		<div class="row">
-			The calculation results as follows:
+			Résultats:
 		</div>
 		<div id="results" class="well row">
 		</div>
