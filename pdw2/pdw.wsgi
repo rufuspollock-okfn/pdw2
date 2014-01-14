@@ -2,7 +2,7 @@
 import os
 
 #set path to real path
-base_path = "/var/www/www.calculateurdomainepublic.fr/cdp"
+base_path = "/var/www/www.publicdomainworks.net/pdw"
 
 #for virtualenv
 activate_this = os.path.join(base_path, 'bin/activate_this.py')

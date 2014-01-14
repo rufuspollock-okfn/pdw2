@@ -24,8 +24,7 @@ def api_index():
     }
     example_json = json.dumps(example, indent=2)
     example_query = 'jurisdiction=france&work=http://data.bnf.fr/15533097/2046___film/rdf.xml'
-    return render_template('api.html', example=example_json,
-            example_query=example_query)
+    return render_template('api.html', example=example_json, example_query=example_query)
 
 @app.route("/api/jurisdictions")
 def jurisdictions():
