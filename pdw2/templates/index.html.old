@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+
+      {%raw%}
+        <script id="error" type="text/html">
+          <div class="alert alert-danger col-xs-12">
+            <div><strong>Oh snap!</strong> apparently there was an error:</div>
+            <pre>{{msg}}</pre>
+          </div>
+        </script>
+        <script id="question" type="text/html">
+          <div class="alert alert-success col-xs-12">
+            {{question}}
+          </div>
+        </script>
+        <script id="evaluation" type="text/html">
+          <div class="alert alert-success col-xs-10 col-md-offset-2">
+            {{evaluation}}
+          </div>
+        </script>
+        <script id="query" type="text/html">
+          <div class="alert alert-info col-xs-12">
+            <pre>{{query}}</pre>
+          </div>
+        </script>
+        <script id="answer" type="text/html">
+          <div class="alert alert-warning col-xs-12">
+            {{answer}}
+          </div>
+        </script>
+        <script id="response" type="text/html">
+              <div class="col-xs-3 alert alert-{{#result}}success{{/result}}{{^result}}danger{{/result}}"><center><strong>
+                {{#result}}<i class="fa fa-check fa-4x"></i>{{/result}}
+                {{^result}}<i class="fa fa-times fa-4x"></i>{{/result}}
+              </strong></center></div>
+            <div class="col-xs-8 col-md-offset-1">{{response}}</div>
+        </script>
+        <script id="searchresult" type="text/html">
+          <hr style="clear:both;" />
+          <div class="result-row" >
+            <div class="col-xs-10">
+              <i class="fa fa-user fa-fw"></i><span class="author">{{author}}</span><br/>
+              <i class="fa fa-file fa-fw"></i><span class="artwork">{{title}}</span>
+            </div>
+
+            <a data-toggle="collapse" name="submit" id="submit" data-parent="#" href="#"><button class="btn btn-success pull-right col-xs-2 calc" title="Calculer" data-rdf="{{rdf}}" data-loading-text="Calcul en cours..."><i class="fa fa-gears fa-fw" ></i>Calculer</button>
+            </a>
+
+            <div class="col-xs-10" id="results" class="well row"></div>
+
+        </script>
+      {%endraw%}
+      
+<div class="banner">
+  <div class="row">
+     	<div class="col-md-1"></div>
+		 <div class="col-md-9">
+		    <h1>Calculateur du Domaine Public <small>version beta</small></h1>
+		     <h3>Utiliser les <a href="/donnees">métadonnées bibliographiques</a> des <a href="/institutions">établissements culturels</a></br>pour identifier, explorer et valoriser les oeuvres du <a href="/domainepublic">domaine public</a>.</h3>
+	   </div>
+     <div class="col-md-2"></div>
+</div>
+  <div class="row searchheader">
+    <div class="col-md-1"></div>
+   <div class="col-md-8"><h4>Chercher dans le catalogue de la BNF</h4></div>
+   <div class="col-md-3"></div>
+ </div>
+</div>
+
+      <div class="row searchbar" id="search-query">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+          <form class="form-inline" role="form">
+              <input type="text" class="searchinput form-control" name="query-author" id="query-author" placeholder="Auteur">
+              <input type="text" class="searchinput form-control" name="query-work" id="query-work" placeholder="Oeuvre">
+              <button type="button" name="search" value="Search" id="searchbutton" class="btn btn-info col-md-2 searchbutton" data-loading-text="Chargement..."><i class="fa fa-search fa-fw"></i>Chercher</button>
+              <label class="jurisdiction">Votre juridiction:</label>
+              <select class="form-control searchjurisdiction" name="jurisdiction" id="jurisdiction" class="col-xs-6">
+                  <option value="France/BNF">France</option>
+                  <option value="Royaume-Uni">Royaume-Uni</option>
+                  <option value="Pays-Bas">Pays-Bas</option>
+                  <option value="Allemagne">Allemagne</option>
+              </select>
+          </form>
+        </div>
+      </div>
+      <div class="row search-result" id="search-result">
+        <div class="col-md-1"></div>
+            <div class="col-md-6" id="search-results"></div>
+      </div>
+
+  <div id="carousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+     <div class="item active">
+      <img src="/static/img/tower_of_babel.jpg" alt="...">
+      <div class="carousel-caption">
+       <h2><span>Comprendre le domaine public</span></h2>
+        <p><span><a href="/domainepublic" style="color:#ffffff;" role="button">Comment identifier les oeuvres du domaine public ?</a></span></p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="/static/img/8th_August_1918_.jpg" alt="...">
+      <div class="carousel-caption">
+       <h2><span>La Guerre 14-18 dans le Domaine Public</span></h2>
+        <p><span><a href="http://test.laderdesders.fr/" style="color:#ffffff;" role="button">Explorer les images d'archives sur le site la Der des Ders, projet lauréat du hackathon Dataculture du ministère de la Culture et de la Communication.</a></span></p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="/static/img/BNF.jpg" alt="...">
+      <div class="carousel-caption">
+       <h2><span>La BNF ouvre ses métadonnées bibliographiques</span></h2>
+        <p><span><a href="http://www.bnf.fr/fr/professionnels/recuperation_donnees_bnf.html" style="color:#ffffff;" role="button">Identifier les oeuvres du Domaine Public au sein de la Bibliothèque Nationale de France.</a></span></p>
+      </div>
+    </div>
+  </div>
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+
+{% endblock %}

@@ -1,31 +1,32 @@
-{% extends "base_mmo.html" %}
+{% extends "base.html" %}
 {% block title %}API{% endblock %}
 
 {% block content %}
-  <section>
-    <h2>Public Domain Works API</h2>
+      <div class="row first">
+    <div class="col-md-1"></div>
+     <div class="col-md-8 textcontent">
+    <h2>API - Calculateur du domaine public</h2>
 
-    <p>The PD calculator API enables you to calculate the public domain status of a work by relying on the back-end public domain calculators. They rely on the copyright flowcharts developped by IViR, Kennisland and the National Library of Luxembourg, in the context of EuropenaConnect.</p>
+    <p>L’interface de programmation (API) du Calculateur du Domaine Public vous permet de calculer le statut juridique d’une œuvre. Il s’appuie sur l’arbre de décisions représentant le régime du droit d’auteur en France développé par l’IViR, Kennisland et la Bibliothèque nationale du Luxembourg dans le cadre du projet EuropeanaConnect.</p>
 
-    <p>The API is located at: <a
+    <p>L'API est disponible à cette adresse :<a
       href="/api/pd">/api/pd</a></p>
-    <p>To make a query to the api you should provide the following parameters:</p>
+    <p> Pour faire une requête vous devez fournir les paramétres suivants :</p>
     <ul>
-      <li>jurisdiction: the country for which to calculate public domain status. Currently we support:
+      <li>jurisdiction : le pays pour lequel vous souhaitez calculer le statut juridique de l'oeuvre :
           'austria', 'belgium', 'bulgaria', 'cyprus', 'czech', 'denmark', 'estonia', 'finland', 'france', 'germany',
           'greece', 'hungary', 'iceland', 'ireland', 'italy', 'latvia', 'lithuania', 'luxembourg', 'malta', 'netherlands', 'norway', 'poland', 'portugal', 'romania', 'slovakia', 'spain', 'sweden', 'switzerland', 'uk'. 
       </li>
-      <li>work: details of the work to perform the calculation for (in json or rdf format).</li>
+      <li>work: détails de l'oeuvre (au format json ou au format rdf).</li>
     </ul>
 
-    <p>The return data will be a dictionary in JSON format with the output from the pdcalc reasoner.</p>
-    <p>It is also permissible to provide a callback parameter for JSONP support.</p>
+    <p>La réponse contenant les résultats du Calculateur sera retournée au format JSON</p>
 
-    <p><strong>Example query</strong></p>
+    <p><strong>Exemple de requête</strong></p>
     <p><a
-      href='/api/pd?{{example_query}}'>/api/pd?{{example_query}}</a></p>
+      href='http://publicdomainworks.net/api/pd?jurisdiction=france/bnf&work=http://data.bnf.fr/15533097/2046___film/rdf.xml&detail=medium&lang=fr'>/api/pd?jurisdiction=france/bnf&work=http://data.bnf.fr/15533097/2046___film/rdf.xml&detail=medium&lang=fr</a></p>
 
-    <h3>PD Status Result</h3>
+    <h3>Résultat du Calculateur</h3>
     <pre class="well">
     {
       "output": "The PDCalc reasoner output string...",
@@ -33,6 +34,7 @@
       "error: "Error messages from the reasoner" 
     }
     </pre>
-
+</div>
+</div>
 
 {% endblock %}

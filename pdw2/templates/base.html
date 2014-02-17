@@ -1,133 +1,81 @@
 {% from "_util.html" import search_form %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   {% block head %}
   <!-- Prevent the conditional comments from stalling page load -->
   <!--[if IE]><![endif]-->
 
-  <title>Calculateur du Domaine Public</title>
-
+  <title>{% block title %}{% endblock %} - Calculateur du Domaine Public</title>
+ <script src="/static/js/icanhazjs.js"></script>
+  <!-- <script src="https://rawgithub.com/HenrikJoreteg/ICanHaz.js/master/ICanHaz.min.js"></script>-->
+   <!-- <script src="/static/js/jquery.js"></script>-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.js"></script>
+  <script src="/static/js/pdc.js"></script>
+  <script type=text/javascript>
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.2/css/font-awesome.min.css" rel="stylesheet">
-  <link href='http://fonts.googleapis.com/css?family=Arvo:regular,bold&amp;subset=latin' rel='stylesheet' />
-  <link href='http://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin' rel='stylesheet' />
-  <link rel="stylesheet" href="/static/css/okfn_footer.css">
+  <meta charset="utf-8">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.2/css/font-awesome.min.css" rel="stylesheet"> 
   <link rel="stylesheet" href="/static/css/pdw.css">
-  <link rel="stylesheet" href="/static/css/style_mmo.css">
-  <link rel="stylesheet" href="/static/css/magic-bootstrap.css">
+  <link rel="stylesheet" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/css/pdc.css">
+
   {% endblock %}
 </head>
-<body>
-  <div id="airlock">
-    <header>
-      {% block masthead %}
-      <div class="jumbotron">
-        <div class="container">
-          <h1>
-            <!--<a href="{{url_for('.home')}}" title="The Public Domain Works Homepage">-->
-              Calculateur du Domaine Public<!--</a>-->
-          </h1>
-        </div>
-      </div>
-      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{{url_for('.home')}}">Public Domain Works</a>
-        </div>
 
+<body>
+      {% block masthead %}
+      <nav class="navbar navbar-default navbar-inverse  navbar-fixed-top" role="navigation">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img id="logo" src="/static/img/logo.png"></a>
+        </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-              <li>
-                <a href="http://publicdomain.okfn.org/calculators/"><i class="fa fa-home fa-fw"></i>Project Home Page</a>
+              <li >
+                <a href="/calculateur">Le calculateur</a>
               </li>
               <li>
-                <a href="{{url_for('api_index')}}"><i class="fa fa-gears fa-fw"></i>API</a>
+                <a href="/domainepublic">Le domaine public</a>
               </li>
               <li>
-                <a href="http://okfn.org/contact/"><i class="fa fa-envelope fa-fw"></i>Contact Us</a>
+                <a href="/donnees">Les métadonnées</a>
               </li>
               <li>
-                <a href="http://okfn.org/privacy-policy/"><i class="fa fa-info-circle fa-fw"></i>Privacy Policy</a>
+                <a href="/institutions">Les établissements culturels</a>
               </li>
             </ul>
         </div>
-      </nav>
+      </div>
+    </nav>
       {% endblock %}
-    </header>
-
-    <article class="container">
       {% block content %}{% endblock %}
-    </article>
 
-    <footer class="container">
+    <div class="panel-footer navbar-fixed-bottom">
       {% block footer %}
-      <p>Un projet
-        <img src="http://assets.okfn.org/images/logo/okf_logo_white_and_green_tiny.png" id="footer-okf-logo" />
-        <a href="http://okfn.org">Open
-        Knowledge Foundation</a>dans le cadre d'un partenariat de recherche avec <a
-        href="http://www.culturecommunication.gouv.fr">le Ministère de la Culture et de la Communication</a>;
-        avec le soutien de la <a
-        href="http://www.shuttleworthfoundation.org/">Shuttleworth
-        Foundation</a>.</p>
-	<p><h5>Calculateurs sur PublicDomainWorks.net sont basées sur les recherches effectuées par EuropeanaConnect, financé par le programme de la Communauté européenne eContentplus.</h5></p>
-      <div class="widget-area">
-        <ul class="xoxo">
-          <li class="widget-container widget_text">
-          <h3 class="widget-title"></h3>
-          <div class="text-widget">
-            <ul>
-              <li>
-                &copy; <a href="http://www.okfn.org/">Open Knowledge Foundation</a>
-              </li>
-              <li>
-                <a href="http://opendefinition.org/okd/" class="img">
-                <img alt="This Content and Data is Open" src="http://assets.okfn.org/images/ok_buttons/oc_80x15_blue.png" class="button" />
-                </a>
-              </li>
-              <li>
-                <a href="http://opendefinition.org/ossd/" class="img">
-                <img alt="This Content and Data is Open"
-                  src="http://assets.okfn.org/images/ok_buttons/os_80x15_orange_grey.png" class="button" />
-                </a>
-              </li>
-            </ul>
-          </div>
-          </li>
-        </ul>
-        <ul class="xoxo">
-          <li class="widget-container widget_text">
-          <h3 class="widget-title"></h3>
-          <div class="textwidget">
-            <ul>
-              <li>
-                <a href="http://publicdomain.okfn.org/calculators/">Project Home Page</a>
-              </li>
-              <li>
-                <a href="{{url_for('api_index')}}">API</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/contact/">Contact Us</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/privacy-policy/">Privacy Policy</a>
-              </li>
-            </ul>
-          </div>
-          </li>
-        </ul>
+        <a href="http://www.culturecommunication.gouv.fr/" target="_blank"><img src="static/img/logo_mcc.png"/></a>
+        <a href="http://fr.okfn.org" target="_blank"><img src="http://assets.okfn.org/web/images/header-logox2.png"/></a>
+        <p class="nav navbar-nav">Le Démonstrateur du Calculateur du domaine public français est une expérimentation réalisée dans le cadre d’un partenariat de recherche et développement entre l'<a href="http://okfn.fr" target="_blank">Open Knowledge Foundation France</a> et le <a href="http://cblog.culture.fr/projet/2013/11/08/un-calculateur-du-domaine-public-francais" target="_blank">ministère de la Culture et de la Communication</a>. Le Démonstrateur du Calculateur du domaine public français est présenté en version bêta.</p>
+          <ul class="nav navbar-nav">
+          <li><a href="/legal">Mentions légales</a></li>
+          <li><a href="/projet">Projet</a></li>
+          <li><a href="/contact">Nous contacter</a></li>
+          <li><a href="/api">API</a></li>
+          </ul>
       </div>
       {% endblock %}
-    </footer>
+   </div>
   </div>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
 </body>
 </html>

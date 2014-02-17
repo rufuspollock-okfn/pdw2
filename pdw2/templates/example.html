@@ -1,0 +1,418 @@
+{% extends "base.html" %}
+{% block title %}Les auteurs pendant la grande guerre{% endblock %}
+{% block content %}
+  <div class="first">
+  	<div class="row">
+  		<div class="col-md-1"></div>
+		 <div class="col-md-8 textcontent">
+		 	<h2>Auteurs ayant vécu pendant la première guerre mondiale</br>
+			<small>Exemples de résultats pré-calculés</small>
+		 	</h2>
+		 </div>
+	</div>
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-5 textcontent">
+
+<!-- List of examples-->
+<div class="example-result">
+	            <div class="col-xs-6">
+	              <i class="fa fa-user fa-fw"></i><span class="author">Charles Péguy (1873-1914)</span><br>
+	              <i class="fa fa-file fa-fw"></i><span class="artwork">La chanson du roi Dagobert</span>
+	            </div>
+	            <a name="submit" id="submit" href="#"><button class="btn btn-success pull-right col-xs-3" title="détails du résultat" data-toggle="modal" data-target="#dagobert"><center><strong>
+                <i class="fa fa-check fa-2x"></i></strong></center></button>
+	            </a>
+</div>
+	            <hr style="clear:both;"/>
+<div class="example-result">
+	            <div class="col-xs-6">
+	              <i class="fa fa-user fa-fw"></i><span class="author">Raoul Dufy (1877-1953)</span><br>
+	              <i class="fa fa-file fa-fw"></i><span class="artwork">La Fée électricité</span>
+	            </div>
+	            <a name="submit" id="submit" href="#"><button class="btn btn-danger pull-right col-xs-3" title="détails du résultat" data-toggle="modal" data-target="#dufy"><center><strong>
+                <i class="fa fa-times fa-2x"></i></strong></center></button>
+	            </a>
+</div>
+
+              <hr style="clear:both;"/>
+<div class="example-result">
+              <div class="col-xs-6">
+                <i class="fa fa-user fa-fw"></i><span class="author">Ernest Hemingway (1899-1961)</span><br>
+                <i class="fa fa-file fa-fw"></i><span class="artwork">Le vieil homme et la mer</span>
+              </div>
+              <a name="submit" id="submit" href="#"><button class="btn btn-danger pull-right col-xs-3" title="détails du résultat" data-toggle="modal" data-target="#viel-homme"><center><strong>
+                <i class="fa fa-times fa-2x"></i></strong></center></button>
+              </a>
+</div>
+
+              <hr style="clear:both;"/>
+<div class="example-result">
+              <div class="col-xs-6">
+                <i class="fa fa-user fa-fw"></i><span class="author">Jean Giono (1895-1970)</span><br>
+                <i class="fa fa-file fa-fw"></i><span class="artwork">Colline</span>
+              </div>
+              <a name="submit" id="submit" href="#"><button class="btn btn-danger pull-right col-xs-3" title="détails du résultat" data-toggle="modal" data-target="#colline"><center><strong>
+                <i class="fa fa-times fa-2x"></i></strong></center></button>
+              </a>
+</div>
+
+	</div>
+</div>
+
+<!-- Popup--> 
+<div class="modal fade" id="dagobert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+<div class="col-xs-8" id="results-work">
+              <i class="fa fa-user fa-fw"></i><span id="author-result" class="author">Charles Péguy (1873-1914)</span><br>
+              <i class="fa fa-file fa-fw"></i><span id="artwork-result" class="artwork">La chanson du roi Dagobert</span>
+            </div>
+              <div class="col-xs-3 alert alert-success" id="alert-result-button"><center><strong>
+                <i class="fa fa-check fa-2x"></i></strong></center></div>
+          <div class="col-xs-12 alert alert-success col-md-offset-1" id="alert-result-description">L'oeuvre  est dans le domaine public. Selon la nature de l'oeuvre, différentes  branches du droit peuvent s'appliquer. A cet effet, nous vous invitons à  procéder à nouveau au calcul.</div>
+          <hr style="clear:both;"><div class="alert alert-info col-xs-12">
+            Parmi les catégories suivantes, dans quelle catégorie tombe l'oeuvre examinée ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oeuvre  littéraire ou artistique
+          </div><div class="alert alert-info col-xs-12">
+            Quel type d'auteur a réalisé cette oeuvre ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Personne physique
+          </div><div class="alert alert-info col-xs-12">
+             Quelle est la nationalité ou le lieu de résidence de l'auteur ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            EEE
+          </div><div class="alert alert-info col-xs-12">
+            S'agit-il d'une oeuvre de collaboration ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été mise à disposition du public ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été publiée dans les 70 ans suivant la mort du dernier auteur survivant ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'auteur est mort pour la France durant la première ou seconde guerre mondiale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre est une oeuvre musicale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que le dernier auteur survivant est mort il y a plus de 100 ans ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="dufy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+<div class="col-xs-8" id="results-work">
+              <i class="fa fa-user fa-fw"></i><span id="author-result" class="author">Raoul Dufy (1877-1953)</span><br>
+              <i class="fa fa-file fa-fw"></i><span id="artwork-result" class="artwork">La Fée électricité</span>
+            </div>
+              <div class="col-xs-3 alert alert-danger" id="alert-result-button"><center><strong>
+                <i class="fa fa-times fa-2x"></i></strong></center></div>
+          <div class="col-xs-12 alert alert-danger col-md-offset-1" id="alert-result-description">L'oeuvre n'est pas dans le domaine public.</div>
+          <hr style="clear:both;"><div class="alert alert-info col-xs-12">
+            Parmi les catégories suivantes, dans quelle catégorie tombe l'oeuvre examinée ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oeuvre  littéraire ou artistique
+          </div><div class="alert alert-info col-xs-12">
+            Quel type d'auteur a réalisé cette oeuvre ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Personne physique
+          </div><div class="alert alert-info col-xs-12">
+             Quelle est la nationalité ou le lieu de résidence de l'auteur ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            EEE
+          </div><div class="alert alert-info col-xs-12">
+            S'agit-il d'une oeuvre de collaboration ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été mise à disposition du public ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été publiée dans les 70 ans suivant la mort du dernier auteur survivant ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'auteur est mort pour la France durant la première ou seconde guerre mondiale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre est une oeuvre musicale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que le dernier auteur survivant est mort il y a plus de 70 ans ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="viel-homme" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+<div class="col-xs-8" id="results-work">
+              <i class="fa fa-user fa-fw"></i><span id="author-result" class="author">Ernest Hemingway (1899-1961)</span><br>
+              <i class="fa fa-file fa-fw"></i><span id="artwork-result" class="artwork">Le vieil homme et la mer</span>
+            </div>
+              <div class="col-xs-3 alert alert-danger" id="alert-result-button"><center><strong>
+                <i class="fa fa-times fa-2x"></i></strong></center></div>
+          <div class="col-xs-12 alert alert-danger col-md-offset-1" id="alert-result-description">L'oeuvre n'est pas dans le domaine public.</div>
+          <hr style="clear:both;"><div class="alert alert-info col-xs-12">
+            Parmi les catégories suivantes, dans quelle catégorie tombe l'oeuvre examinée ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oeuvre  littéraire ou artistique
+          </div><div class="alert alert-info col-xs-12">
+            Quel type d'auteur a réalisé cette oeuvre ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Personne physique
+          </div><div class="alert alert-info col-xs-12">
+             Quelle est la nationalité ou le lieu de résidence de l'auteur ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            EEE
+          </div><div class="alert alert-info col-xs-12">
+            S'agit-il d'une oeuvre de collaboration ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été mise à disposition du public ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été publiée dans les 70 ans suivant la mort du dernier auteur survivant ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'auteur est mort pour la France durant la première ou seconde guerre mondiale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre est une oeuvre musicale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que le dernier auteur survivant est mort il y a plus de 70 ans ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="colline" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+<div class="col-xs-8" id="results-work">
+              <i class="fa fa-user fa-fw"></i><span id="author-result" class="author">Jean Giono (1895-1970)</span><br>
+              <i class="fa fa-file fa-fw"></i><span id="artwork-result" class="artwork">Colline</span>
+            </div>
+              <div class="col-xs-3 alert alert-danger" id="alert-result-button"><center><strong>
+                <i class="fa fa-times fa-2x"></i></strong></center></div>
+          <div class="col-xs-12 alert alert-danger col-md-offset-1" id="alert-result-description">L'oeuvre n'est pas dans le domaine public.</div>
+          <hr style="clear:both;"><div class="alert alert-info col-xs-12">
+            Parmi les catégories suivantes, dans quelle catégorie tombe l'oeuvre examinée ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oeuvre  littéraire ou artistique
+          </div><div class="alert alert-info col-xs-12">
+            Quel type d'auteur a réalisé cette oeuvre ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Personne physique
+          </div><div class="alert alert-info col-xs-12">
+             Quelle est la nationalité ou le lieu de résidence de l'auteur ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            EEE
+          </div><div class="alert alert-info col-xs-12">
+            S'agit-il d'une oeuvre de collaboration ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été mise à disposition du public ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre a été publiée dans les 70 ans suivant la mort du dernier auteur survivant ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Oui
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'auteur est mort pour la France durant la première ou seconde guerre mondiale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que l'oeuvre est une oeuvre musicale ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div><div class="alert alert-info col-xs-12">
+            Est-ce que le dernier auteur survivant est mort il y a plus de 70 ans ?
+          </div><div class="alert alert-dismissable col-xs-12">
+            Non
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body">
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+{% endblock %}
