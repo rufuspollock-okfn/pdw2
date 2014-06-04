@@ -56,34 +56,6 @@ PDC = {};
 PDC.server = "http://publicdomainworks.net/api";
 PDC.root = "http://publicdomainworks.net";
 
-//fixed output for showcasing
-var data_templ = {};
-data_templ.low = [
-	{"type": "response", "response": "The related right of the producer of the film producer in the first fixation of the film has not expired. Please contact the right-holder before use.", "result": false}
-];
-data_templ.medium = [
-	{"type": "question", "question": "Into which of the following categories does the examined item fall? (1)", "id": "n0"}, 
-	{"type": "evaluation", "evaluation": "First fixation of a film (3) (4)"},  
-	{"answer": "First fixation of a film (3) (4)", "type": "answer"}, 
-	{"type": "question", "question": "Was the film published or communicated to the public within 50 years from the fixation?", "id": "n1"}, 
-	{"answer": "No", "type": "answer"}, 
-	{"type": "question", "question": "Was the film first fixated more than 50 years ago?", "id": "n5"}, 
-	{"answer": "No", "type": "answer"}, 
-	{"type": "response", "response": "The related right of the producer of the film producer in the first fixation of the film has not expired. Please contact the right-holder before use.", "result": false}
-];
-data_templ.high = [
-	{"type": "question", "question": "Into which of the following categories does the examined item fall? (1)", "id": "n0"}, 
-	{"type": "evaluation", "evaluation": "First fixation of a film (3) (4)"}, 
-	{"query": "prefix bnf-onto: <http://data.bnf.fr/ontology/bnf-onto/> ASK { ?x bnf-onto:subject \"Audiovisuel\"}", "type":"query"}, 
-	{"answer": "First fixation of a film (3) (4)", "type": "answer"}, 
-	{"type": "question", "question": "Was the film published or communicated to the public within 50 years from the fixation?", "id": "n1"}, 
-	{"query": "prefix dc: <http://purl.org/dc/terms/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> ASK { {  ?a dc:date ?b.  FILTER (year(xsd:dateTime(?b)) +50 < year(now()) )  } }", "type": "query"}, 
-	{"answer": "No", "type": "answer"}, 
-	{"type": "question", "question": "Was the film first fixated more than 50 years ago?", "id": "n5"}, 
-	{"query": "prefix dc: <http://purl.org/dc/terms/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> ASK { {  ?a dc:date ?b.  FILTER (year(xsd:dateTime(?b)) +50 < year(now()) )  } }", "type": "query"}, 
-	{"answer": "No", "type": "answer"}, 
-	{"type": "response", "response": "The related right of the producer of the film producer in the first fixation of the film has not expired. Please contact the right-holder before use.", "result": false}];
-
 $(function(){
 	PDC.showresult = function(data) {
 		// console.log(data);
@@ -140,15 +112,15 @@ $(function(){
 			},
 			"success": PDC.showresult,
 			"dataType":"json",
-			"timeout":3000,
+			"timeout":30000,
 			"error":PDC.showresult
 		});
 	};
 
 	$.getJSON('/api/jurisdictions', function(data){
-		$(data.valid).each(function(e,i){
-			$('#jurisdiction').append('<option value="'+i+'">'+i+'</option>');
-		});
+		for(var k in data.valid){
+			$('#jurisdiction').append('<option value="'+data.valid[k]+'">'+k+'</option>');
+		}
 		$('.sample_url').on('click', function(){
 			$('#work').val($(this).data('url'));
 			$('#jurisdiction').val($(this).data('jurisdiction'));

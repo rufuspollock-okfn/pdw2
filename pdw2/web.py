@@ -5,6 +5,52 @@ import csv, json
 import re
 import codecs, cStringIO
 
+from datetime import timedelta
+from flask import make_response
+from functools import update_wrapper
+
+
+def crossdomain(origin=None, methods=None, headers=None,
+                max_age=21600, attach_to_all=True,
+                automatic_options=True):
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, basestring):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, basestring):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        def wrapped_function(*args, **kwargs):
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+    return decorator
+
 class UTF8Recoder:
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8
@@ -51,31 +97,29 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('error logs')
 
-
-
-
 @app.route("/")
 def home():
     return render_template('index.html')
     return api_index()
 
 @app.route("/list")
+@crossdomain("*")
 def list():
-	qa = request.args.get('author');
-	qw = request.args.get('work');
-	f = open('/var/www/www.publicdomainworks.net/pdw/pdw2/pdw2/worklist/list.csv', 'r');
-        fields = ("author", "title", "rdf")
-	reader = UnicodeReader(f, delimiter="\t")
-	dict_reader = [ dict(zip(fields, row)) for row in reader ]
-        out = json.dumps([row for row in dict_reader if matches(row, qa, qw)])
-	return out
+    qa = request.args.get('author', "");
+    qw = request.args.get('work', "");
+    f = open('/var/www/www.publicdomainworks.net/pdw/pdw2/pdw2/worklist/list.csv', 'r');
+    fields = ("author", "title", "rdf")
+    reader = UnicodeReader(f, delimiter="\t")
+    dict_reader = [ dict(zip(fields, row)) for row in reader ]
+    out = json.dumps([row for row in dict_reader if matches(row, qa, qw)])
+    return out
 
 def matches(row, qa, qw):
-	return qa.lower() in row["author"].lower() and qw.lower() in row["title"].lower();
+    return qa.lower() in row["author"].lower() and qw.lower() in row["title"].lower();
 
 @app.route("/api/jurisdictions")
 def jurisdictions():
-    ret = {'valid':["france", "france/bnf"]}
+    ret = {'valid':{"France": "france/bnf"}}
     return jsonify(ret)
 
 
@@ -92,7 +136,7 @@ def api_index():
         ]
     }
     example_json = json.dumps(example, indent=2)
-    example_query = 'jurisdiction=france/BNF&work=http://data.bnf.fr/15533097/2046___film/rdf.xml'
+    example_query = 'jurisdiction=france/bnf&work=http://data.bnf.fr/15533097/2046___film/rdf.xml'
     return render_template('api.html', example=example_json, example_query=example_query)
 
 
@@ -116,10 +160,11 @@ import threading
 import subprocess
 
 class API(threading.Thread):
-    def __init__(self, detail, jurisdiction, work, flavor=None ):
+    def __init__(self, detail, jurisdiction, work, flavor=None, language="en"):
         self.stdout = None
         self.stderr = None
 
+        self.language = language
         self.detail = detail
         self.jurisdiction = jurisdiction
         self.work = work
@@ -130,8 +175,20 @@ class API(threading.Thread):
         path_base = "/var/www/www.publicdomainworks.net/pdcalc"
         base_path = path_base + "/src/pd"
 
-        os.chdir(base_path)
         venv_python_file = path_base + "/bin/python"
+        venv_activator   = path_base + "/bin/activate"
+        venv_deactivator   = path_base + "/bin/deactivate"
+        self.env = os.environ.copy()
+        path_comps = self.env['PATH'].split(':')[1:]
+        #print path_comps
+        path_comps.insert(0, path_base+"/bin")
+        #print path_comps
+        self.env['PATH'] = ":".join(path_comps)
+        self.env['VIRTUAL_ENV'] = path_base
+        self.env['PWD'] = base_path
+        self.env["_"] = venv_python_file
+        #print self.env['PATH']
+        print self.env
         cmd = [venv_python_file, os.path.join(base_path, "pdcalc.py")]
         cmd.extend(['-o', "json"])
         cmd.extend(['-f', "rdf"])
@@ -140,11 +197,13 @@ class API(threading.Thread):
         cmd.extend(['-c', self.jurisdiction])
 
         cmd.extend(['-i', self.work])
+        cmd.extend(['-L', self.language])
         if self.flavor is not None:
             cmd.extend(['-l', self.flavor])
+        print str(cmd)
 
-        print " ".join(cmd)
-        process = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        #print " ".join(cmd)
+        process = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=self.env, cwd=base_path)
 
         self.stdout, self.stderr = process.communicate()
 
@@ -153,6 +212,7 @@ class API(threading.Thread):
 
 
 @app.route("/api/pd")
+@crossdomain("*")
 @jsonp
 def api_pd():
     
@@ -164,9 +224,11 @@ def api_pd():
     jd = request.args.get('jurisdiction')
     jd = jd.split('/')
     jurisdiction = jd[0]
+    jurisdiction = jurisdiction.lower()
     flavor = None
     if len(jd)>1:
         flavor = jd[1]
+        flavor = flavor.lower()
     
     #work
     work = request.args.get('work')
@@ -174,14 +236,25 @@ def api_pd():
     #detail level
     detail = request.args.get('detail', "low")
 
+    language = request.args.get('lang', "en")
     
-    process = API(detail,jurisdiction, work, flavor)
+
+    
+    process = API(detail,jurisdiction, work, flavor, language)
     process.start()
     process.join()
     out, err = process.get_out_err()
     output = {}
-    output['output'] = out
+    output['out_raw'] = out
+
+  #  os.system("cat '" + output['out_raw'] + "' > /var/www/www.publicdomainworks.net/stupid.log")
+
     output['error'] = err
+    try:
+        output['output'] = json.loads(out)
+    except:
+        output['output'] = ""
+    
     return jsonify(output)
 
 if __name__ == "__main__":
