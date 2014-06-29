@@ -122,7 +122,7 @@ def jurisdictions():
 
 
     path_base = "/var/www/www.publicdomainworks.net/pdcalc"
-    base_path = path_base + "/src/pd"
+    base_path = path_base + "/src/pd" 
 
     venv_python_file = path_base + "/bin/python"
     venv_activator   = path_base + "/bin/activate"
