@@ -119,7 +119,42 @@ def matches(row, qa, qw):
 
 @app.route("/api/jurisdictions")
 def jurisdictions():
-    ret = {'valid':{"France": "france/bnf"}}
+
+
+    path_base = "/var/www/www.publicdomainworks.net/pdcalc"
+    base_path = path_base + "/src/pd"
+
+    venv_python_file = path_base + "/bin/python"
+    venv_activator   = path_base + "/bin/activate"
+    venv_deactivator   = path_base + "/bin/deactivate"
+    env = os.environ.copy()
+    path_comps = env['PATH'].split(':')[1:]
+    #print path_comps
+    path_comps.insert(0, path_base+"/bin")
+    #print path_comps
+    env['PATH'] = ":".join(path_comps)
+    env['VIRTUAL_ENV'] = path_base
+    env['PWD'] = base_path
+    env["_"] = venv_python_file
+    #print self.env['PATH']
+    print env
+    cmd = [venv_python_file, os.path.join(base_path, "pdcalc.py")]
+    cmd.extend(['-o', "json"])
+    cmd.extend(['-V'])
+
+    print str(cmd)
+
+    process = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, cwd=base_path)
+
+    stdout, stderr = process.communicate()
+
+    opts = json.loads(stdout)
+    valid = {}
+    for opt in opts:
+    	valid[opt] = opt
+
+
+    ret = {'valid':valid	}
     return jsonify(ret)
 
 
