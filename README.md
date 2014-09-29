@@ -3,5 +3,5 @@ pdw2
 
 Public Domain Works webapp and library
 
-All the code is released under The MIT License (MIT).
-http://opensource.org/licenses/MIT
+All the code is released under <a href="http://opensource.org/licenses/MIT" target"_BLANK">The MIT License (MIT)<a>.
+
