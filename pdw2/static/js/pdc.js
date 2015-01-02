@@ -75,7 +75,8 @@ $(function(){
 		$.ajax({
 			"url":PDC.server+'/pd',
 			"data":{
-				jurisdiction: $(this).data('jurisdiction') || $('#jurisdiction').val() || "france/bnf",
+				jurisdiction: "france",
+				flavour:"bnf",
 				work:$(this).data('rdf') || $('#work').val(),
 				detail:$(this).data('detail') || $('#detail').val() || "medium",
 				lang:"fr"
