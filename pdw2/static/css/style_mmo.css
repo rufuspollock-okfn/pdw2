@@ -1,1 +1,124 @@
-body { padding-top: 70px; }
+body { padding-top: 50px; }
+
+
+
+.dark{
+	background-color: #333333;
+	padding-top:15px;
+}
+
+footer{
+	width:100%;
+	position:absolute;
+	bottom: 0px;
+	margin:0;
+	font-size:0.7em;
+	font-weight: bold;
+}
+
+.jumbotron{
+	margin-bottom:0px;
+	background-color: rgba(238, 238, 238, 0.7);
+}
+
+
+#results{
+	overflow: auto;
+}
+
+#airlock{
+
+	background-position: 0 0;
+	background-repeat: no-repeat;
+}
+
+.go{
+	cursor: pointer;
+}
+
+.go.left{
+	margin-top: 100px;
+	margin-left: 100px;
+	width: 30px;
+	height: 30px;
+	display: block;
+	border-radius: 20px;
+	background-color: white;
+	text-align: center;
+	line-height: 30px;
+	vertical-align: middle;
+	float: left;
+}
+
+.go.right{
+	margin-top: 100px;
+	margin-right: 100px;
+	width: 30px;
+	height: 30px;
+	display: block;
+	border-radius: 20px;
+	background-color: white;
+	text-align: center;
+	line-height: 30px;
+	vertical-align: middle;
+	float:right;
+}
+
+.artwork{
+	position: relative;
+top: -386px;
+z-index: -10;
+}
+
+.artwork:not(.active){
+	display: none;
+}
+
+.artwork img{
+	width: 100%;
+}
+
+
+
+.artwork .carousel-caption{
+position: absolute;
+top: 311px;
+text-align: left;
+}
+}
+.artwork-title{
+	
+	background-color: #333;
+	color:white;
+	font-size: 2em;
+}
+
+
+.artwork-text{
+	background-color: #333;
+	color:white;
+	font-size: 1.3em;
+	margin-top: -5px;
+}
+.artwork-text a {
+	color:white;
+	font-weight:100;
+}
+
+
+body.index{
+	overflow: hidden;
+}
+
+
+
+
+.modal-dialog{
+position: absolute;
+left: 50%;
+
+margin-left: -312px;
+height: 500px;
+top: 50%;
+margin-top: -250px;
+} 

@@ -11,25 +11,45 @@
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.2/css/font-awesome.min.css" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <link href='http://fonts.googleapis.com/css?family=Arvo:regular,bold&amp;subset=latin' rel='stylesheet' />
   <link href='http://fonts.googleapis.com/css?family=Inconsolata&amp;subset=latin' rel='stylesheet' />
   <link rel="stylesheet" href="/static/css/okfn_footer.css">
   <link rel="stylesheet" href="/static/css/pdw.css">
-  <link rel="stylesheet" href="/static/css/style_mmo.css">
   <link rel="stylesheet" href="/static/css/magic-bootstrap.css">
+  <link rel="stylesheet" href="/static/css/style_mmo.css">
+  <script src="https://rawgit.com/louisremi/jquery.backgroundSize.js/master/jquery.backgroundSize.js"></script>
   {% endblock %}
+
+  <script>
+  var resize = function(){
+    $("#airlock").height($(window).height()-$("nav").height()-$("footer").height());
+    $(".carousel-inner").height($(window).height()-$("nav").height()-$("footer").height());
+    
+  }
+  $(function(){
+    resize();
+  });
+  </script>
 </head>
-<body>
+<body class="{% if page is defined %}
+              {{page.title}}
+            {% else %}
+              index
+            {% endif %}">
   <div id="airlock">
     <header>
       {% block masthead %}
       <div class="jumbotron">
         <div class="container">
           <h1>
-            <!--<a href="{{url_for('.home')}}" title="The Public Domain Works Homepage">-->
-              Public Domain Works<!--</a>-->
+            {% if page is defined %}
+              {{page.title}}
+            {% else %}
+              {{context.title}}
+            {% endif %}
           </h1>
         </div>
       </div>
@@ -41,34 +61,51 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{{url_for('.home')}}">Public Domain Works</a>
+          <a class="navbar-brand" href="{{url_for('.home')}}">{{context.title}}</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
+            {% for ipage in pages %}
+              {% if ipage.area =="left" %}
               <li>
-                <a href="http://publicdomain.okfn.org/calculators/"><i class="fa fa-home fa-fw"></i>Project Home Page</a>
+              <a 
+              {% if ipage.type == "link" %}
+                href="{{ipage.content}}"
+              {% elif ipage.type == "page" %}
+                href="/{{context.lang}}/{{ipage.id}}"
+              {% endif %}>
+              <i class="fa fa-{{ipage.icon}} fa-fw"></i>{{ipage.title}}</a>
               </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {% for ipage in pages %}
+              {% if ipage.area =="right" %}
               <li>
-                <a href="{{url_for('api_index')}}"><i class="fa fa-gears fa-fw"></i>API</a>
+              <a 
+              {% if ipage.type == "link" %}
+                href="{{ipage.content}}"
+              {% elif ipage.type == "page" %}
+                href="/{{context.lang}}/{{ipage.id}}"
+              {% endif %}>
+              <i class="fa fa-{{ipage.icon}} fa-fw"></i>{{ipage.title}}</a>
               </li>
-              <li>
-                <a href="http://okfn.org/contact/"><i class="fa fa-envelope fa-fw"></i>Contact Us</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/privacy-policy/"><i class="fa fa-info-circle fa-fw"></i>Privacy Policy</a>
-              </li>
-            </ul>
+              {% endif %}
+            {% endfor %}
+          </ul>
         </div>
       </nav>
       {% endblock %}
     </header>
 
-    <article class="container">
+    <article>
       {% block content %}{% endblock %}
     </article>
 
-    <footer class="container">
+    <footer>
       {% block footer %}
       <p>Developed by the
         <img src="http://assets.okfn.org/images/logo/okf_logo_white_and_green_tiny.png" id="footer-okf-logo" />
@@ -76,7 +113,7 @@
         Knowledge Foundation</a> with support from the <a
         href="http://www.shuttleworthfoundation.org/">Shuttleworth
         Foundation</a>.</p>
-	<p><h5>Calculators on PublicDomainWorks.net are based on the research done by EuropeanaConnect, funded by the European Community Programme eContentplus</h5></p>
+	<p>Calculators on PublicDomainWorks.net are based on the research done by EuropeanaConnect, funded by the European Community Programme eContentpluss</p>
       <div class="widget-area">
         <ul class="xoxo">
           <li class="widget-container widget_text">
@@ -104,22 +141,7 @@
         <ul class="xoxo">
           <li class="widget-container widget_text">
           <h3 class="widget-title"></h3>
-          <div class="textwidget">
-            <ul>
-              <li>
-                <a href="http://publicdomain.okfn.org/calculators/">Project Home Page</a>
-              </li>
-              <li>
-                <a href="{{url_for('api_index')}}">API</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/contact/">Contact Us</a>
-              </li>
-              <li>
-                <a href="http://okfn.org/privacy-policy/">Privacy Policy</a>
-              </li>
-            </ul>
-          </div>
+         
           </li>
         </ul>
       </div>

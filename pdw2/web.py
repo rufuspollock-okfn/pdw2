@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, json, request, current_app
+from flask import Flask, jsonify, render_template, json, request, current_app, redirect
 from functools import wraps
 import subprocess, os
 import csv, json
@@ -8,7 +8,6 @@ import codecs, cStringIO
 from datetime import timedelta
 from flask import make_response
 from functools import update_wrapper
-
 
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
@@ -87,6 +86,7 @@ app = Flask(__name__)
 
 app.DEBUG=True
 
+
 if not app.debug:
     import logging
     from logging.handlers import RotatingFileHandler
@@ -97,10 +97,48 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('error logs')
 
-@app.route("/")
-def home():
-    return render_template('index.html')
+@app.route("/", defaults={"lang":None})
+@app.route("/<string(length=2):lang>")
+def home(lang):
+    if lang is None:
+        lang = request.user_agent.language
+        if lang is None:
+            lang="en"
+    data = json.load(open("/var/www/www.publicdomainworks.net/pdw/pdw2/pdw2/i18n/"+lang+".json"))
+    data["lang"] = lang
+
+    pages = data.get("pages")
+    npages = []
+    for page in pages: 
+        pages[page]['id']=page
+        npages.append(pages[page])
+
+
+    return render_template('index.html', pages=npages, context=data)
     return api_index()
+
+@app.route("/<string(length=2):lang>/<page>")
+@app.route("/<string(length=2):lang>/", defaults={"page":None})
+def get_page(lang, page):
+    if page is None:
+        return redirect("/")
+    if lang=="p":
+        lang = request.user_agent.language
+    if lang is None:
+        lang="en"
+    data = json.load(open("/var/www/www.publicdomainworks.net/pdw/pdw2/pdw2/i18n/"+lang+".json"))
+    data["lang"] = lang
+    pages = data.get("pages")
+    npages = []
+    for apage in pages: 
+        pages[apage]['id']=apage
+        npages.append(pages[apage])
+
+    if page in pages:
+        the_page = pages.get(page)
+
+        return render_template("page.html", page=the_page, pages=npages, context=data)
+    return redirect("/")
 
 @app.route("/list")
 @crossdomain("*")
@@ -118,6 +156,7 @@ def matches(row, qa, qw):
     return qa.lower() in row["author"].lower() and qw.lower() in row["title"].lower();
 
 @app.route("/api/jurisdictions")
+@crossdomain("*")
 def jurisdictions():
 
 
@@ -140,7 +179,7 @@ def jurisdictions():
     print env
     cmd = [venv_python_file, os.path.join(base_path, "pdcalc.py")]
     cmd.extend(['-o', "json"])
-    cmd.extend(['-V'])
+    cmd.extend(['-C'])
 
     print str(cmd)
 
@@ -151,28 +190,70 @@ def jurisdictions():
     opts = json.loads(stdout)
     valid = {}
     for opt in opts:
-    	valid[opt] = opt
+        valid[opt] = opt
 
 
-    ret = {'valid':valid	}
+    ret = {'valid':valid    }
     return jsonify(ret)
 
 
-@app.route("/api")
-def api_index():
-    example = {
-        "title": "An Example",
-        "issued" : "19030101",
-        "author" : [
-            {
-                "name" : "John Smith",
-                "birth" : "1849",
-            }
-        ]
-    }
-    example_json = json.dumps(example, indent=2)
-    example_query = 'jurisdiction=france/bnf&work=http://data.bnf.fr/15533097/2046___film/rdf.xml'
-    return render_template('api.html', example=example_json, example_query=example_query)
+@app.route("/api/flavours")
+@crossdomain("*")
+def flavours():
+
+
+    path_base = "/var/www/www.publicdomainworks.net/pdcalc"
+    base_path = path_base + "/src/pd" 
+
+    venv_python_file = path_base + "/bin/python"
+    venv_activator   = path_base + "/bin/activate"
+    venv_deactivator   = path_base + "/bin/deactivate"
+    env = os.environ.copy()
+    path_comps = env['PATH'].split(':')[1:]
+    #print path_comps
+    path_comps.insert(0, path_base+"/bin")
+    #print path_comps
+    env['PATH'] = ":".join(path_comps)
+    env['VIRTUAL_ENV'] = path_base
+    env['PWD'] = base_path
+    env["_"] = venv_python_file
+    #print self.env['PATH']
+    print env
+    cmd = [venv_python_file, os.path.join(base_path, "pdcalc.py")]
+    cmd.extend(['-o', "json"])
+    cmd.extend(['-F'])
+
+    print str(cmd)
+
+    process = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, cwd=base_path)
+
+    stdout, stderr = process.communicate()
+
+    opts = json.loads(stdout)
+    valid = {}
+    for opt in opts:
+        valid[opt] = opt
+
+
+    ret = {'valid':valid    }
+    return jsonify(ret)
+
+
+#@app.route("/api")
+#def api_index():
+#    example = {
+#        "title": "An Example",
+#        "issued" : "19030101",
+#        "author" : [
+#            {
+#                "name" : "John Smith",
+#                "birth" : "1849",
+#            }
+#        ]
+#    }
+#    example_json = json.dumps(example, indent=2)
+#    example_query = 'jurisdiction=france/bnf&work=http://data.bnf.fr/15533097/2046___film/rdf.xml'
+#    return render_template('api.html', example=example_json, example_query=example_query)
 
 
 
@@ -257,13 +338,9 @@ def api_pd():
         })
     #jurisdiction + flavor combo
     jd = request.args.get('jurisdiction')
-    jd = jd.split('/')
-    jurisdiction = jd[0]
-    jurisdiction = jurisdiction.lower()
-    flavor = None
-    if len(jd)>1:
-        flavor = jd[1]
-        flavor = flavor.lower()
+    jurisdiction = jd.lower()
+    flavor = request.args.get('flavour')
+    flavor = flavor.lower()
     
     #work
     work = request.args.get('work')

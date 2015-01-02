@@ -3,7 +3,7 @@
 
 {% block content %}
  
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+
 {% raw %}
 <script id="error" type="text/html">
   <div class="alert alert-danger col-xs-12">
@@ -30,6 +30,11 @@
   <div class="alert alert-warning col-xs-12">
 	  {{answer}}
   </div>
+</script>
+<script id="context" type="text/html">
+	<div class="alert alert-info">
+	    <div>Public Domain from: {{data.fromdate}} or {{data.fromyear}}</div>
+	</div>
 </script>
 <script id="response" type="text/html">
 	  	<div class="col-xs-3 alert alert-{{#result}}success{{/result}}{{^result}}danger{{/result}}"><center><strong>
@@ -62,6 +67,7 @@ $(function(){
 		// data.error = "";
 		// data.output = data_templ[$('#detail').val()];
 		
+        $("#resultmodal").modal();
         $('#results').empty();
 
         if (data.output == "" && data.error != ""){
@@ -107,8 +113,9 @@ $(function(){
 			"url":PDC.server+'/pd',
 			"data":{
 				"jurisdiction": $('#jurisdiction').val(),
-				work:$(this).data('rdf') || $('#work').val(),
-				detail:$('#detail').val()
+				"flavour": $('#flavour').val(),
+				"work":$(this).data('rdf') || $('#work').val(),
+				"detail":$('#detail').val()
 			},
 			"success": PDC.showresult,
 			"dataType":"json",
@@ -121,10 +128,19 @@ $(function(){
 		for(var k in data.valid){
 			$('#jurisdiction').append('<option value="'+data.valid[k]+'">'+k+'</option>');
 		}
-		$('.sample_url').on('click', function(){
-			$('#work').val($(this).data('url'));
-			$('#jurisdiction').val($(this).data('jurisdiction'));
-		});
+		
+	});
+
+	$.getJSON('/api/flavours', function(data){
+		for(var k in data.valid){
+			$('#flavour').append('<option value="'+data.valid[k]+'">'+k+'</option>');
+		}
+	});
+
+	$('.sample_url').on('click', function(){
+		$('#work').val($(this).data('url'));
+		$('#jurisdiction').val($(this).data('jurisdiction'));
+		$('#flavour').val($(this).data('flavour'));
 	});
 
 	$('#search').on('click', function() {
@@ -141,6 +157,7 @@ $(function(){
 			"error":PDC.queryresults
 		});
 	});
+
 /*	$.getJSON('/list', function(data) {
 		console.log('yooo' + data.valid);
 		$(data).each(function(e,i) {
@@ -154,7 +171,7 @@ $(function(){
 
 </script>
 <section>
-    <h2>Welcome!</h2>
+<!--    <h2>Welcome!</h2>
 	<div class="primary col-xs-5" >
 		<p>
 		Public Domain Works is a repository of works that have entered the public domain. You can search for works that are in the public domain in any given jurisdiction, or browse public domain works by categories. Public Domain Works is powered by the <a href="http://publicdomain.okfn.org/calculators">Public Domain Calculators</a>, a tool that determines the public domain status of a work based on bibliographic metadata<br/>
@@ -176,41 +193,144 @@ $(function(){
 	</div>
 
 	</div>
-
-	<div class="secondary col-xs-5 col-md-offset-2">
-		<p>Try the public domain calculators:</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-globe fa-fw"></i>Select your jurdisdiction:</span>
-			<select name="jurisdiction" id="jurisdiction" class="col-xs-6">
-				<!---->
+-->
+	
+	<div class="row dark">
+	<div class="container">
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="jurisdiction">Select your jurdisdiction:</label>
+			<div class="input-group">
+			<div class="input-group-addon"><i class="fa fa-globe fa-fw" title="Select your jurisdiction"></i></div>
+			
+			<select class="form-control" name="jurisdiction" id="jurisdiction">
+				
 			</select>
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-link fa-fw"></i>Paste your metadata url:</span>
-			<input type="text" name="work" id="work" class="col-xs-6">
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-question fa-fw"></i>Sample data urls:</span>
-			<a class="sample_url" data-url="http://data.bnf.fr/15533097/2046___film/rdf.xml" data-jurisdiction="france/bnf">2046 - Wong Kar Wai - Bnf France</a>
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-signal fa-fw"></i>Select detail level:</span>
-			<select name="detail" id="detail" class="col-xs-6">
-				<option value="low" >low</option>
-				<option value="medium">medium</option>
-				<option value="high">high</option>
-			</select>
-		</p>
-		<p class="row">
-			<button type="button" name="submit" value="Calculate!" id="submit" class="btn btn-success col-xs-12" ><i class="fa fa-gears fa-fw"></i>Calculate!</button>
-		</p>
-
-
-		<div class="row">
-			The calculation results as follows:
+			</div>
 		</div>
-		<div id="results" class="well row">
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="flavour">Select your flavour:</label>
+			<div class="input-group">
+				<div class="input-group-addon"> <i class="fa fa-spoon fa-fw" title="Select your flavour"></i>
+				</div>
+				<select  name="flavour" id="flavour" class="form-control">
+				
+			</select>
+			</div>
+		</div>
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="work">Paste your metadata url:</label>
+			<div class="input-group">
+				<div class="input-group-addon"><i class="fa fa-link fa-fw"></i></div>
+			<input type="text" name="work" id="work" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="work"> <i class="fa fa-signal fa-fw"></i>Select detail level:</label>
+			<div class="input-group">
+				<div class="input-group-addon"><i class="fa fa-signal fa-fw"></i></div>
+				<select name="detail" id="detail" class="form-control">
+					<option value="low" >low</option>
+					<option value="medium">medium</option>
+					<option value="high">high</option>
+				</select>
+			</div>
+		</div>
+
+
+
+		<div class="form-group col-lg-2">
+			<div class="dropdown">
+			  <button class="col-xs-12 btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+			    Samples
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			    <li role="presentation"><a class="sample_url" data-url="http://data.bnf.fr/15533097/2046___film/rdf.xml" data-jurisdiction="france" data-flavour="bnf">2046 - Wong Kar Wai - Bnf France</a></li>
+			  </ul>
+			</div>
+		</div>
+
+		<div class="form-group col-lg-2">
+			<button type="button" name="submit" value="Calculate!" id="submit" class="btn btn-success col-xs-12" ><i class="fa fa-gears fa-fw"></i>Calculate!</button>
+
+			<div class="modal fade" id="resultmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Calculation Results</h4>
+      </div>
+	  <div class="modal-body">
+	    <div id="results" class="well row"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 		</div>
 	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </section>
+
+<div id="artworks" class="carousel slide " data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+
+
+	{% for artwork in context.artworks %}
+	<div class="item artwork {%if loop.index == 1%} active{%endif%}" data-url="{{artwork.url}}">
+		<img src="{{artwork.url}}">
+      <div class="carousel-caption">
+		<div class=" col-lg-offset-1 "><span class="artwork-title">{{artwork.title}}</span></div>
+		<div class=" col-lg-offset-1 "><span class="artwork-text"><a href="{{artwork.link}}">{{artwork.text}}</a></span></div>
+      </div>
+
+		
+	</div>
+	{% endfor %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="fa fa-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="fa fa-chevron-right"></span>
+  </a>
+</div>
+
+
+
+</div>
 {% endblock %}

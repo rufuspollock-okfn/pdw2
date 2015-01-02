@@ -1,0 +1,65 @@
+
+{
+	"title":"Calcolatore del Pubblico Dominio",
+	"artworks":[{
+		"url":"http://www.calculateurdomainepublic.fr/static/img/BNF.jpg",
+		"title":"La Bibliothèque nationale de France ouvre ses métadonnées bibliographiques",
+		"text":"Valoriser les données publiques culturelles",
+		"link":"#"
+	},{
+		"url":"http://www.calculateurdomainepublic.fr/static/img/BNF.jpg",
+		"title":"La Bibliothèque nationale de France ouvre ses métadonnées bibliographiques",
+		"text":"Valoriser les données publiques culturelles",
+		"link":"#"
+	}],
+	"pages":{
+		"main":{
+			"title":"Main",
+			"type":"link",
+			"area":"right",
+			"content":"/"
+			},
+		"why":{
+			"title":"Perchè",
+			"type":"page",
+			"content":"",
+			"area":"left",
+			"icon":"question"
+			},
+		"metadata":{
+			"title":"Metadati",
+			"type":"page",
+			"content":"",
+			"area":"left",
+			"icon":"book"
+			},
+		"institutions":{
+			"title":"Istituzioni",
+			"type":"page",
+			"area":"left",
+			"content":"",
+			"icon":"bank"
+			},
+		"api":{
+			"title":"API",
+			"type":"page",
+			"area":"right",
+			"content":"<section>     <h2>Public Domain Works API</h2>      <p>The PD calculator API enables you to calculate the public domain status of a work by relying on the back-end public domain calculators. They rely on the copyright flowcharts developped by IViR, Kennisland and the National Library of Luxembourg, in the context of EuropenaConnect.</p>      <p>The API is located at: <a       href=\"/api/pd\">/api/pd</a></p>     <p>To make a query to the api you should provide the following parameters:</p>     <ul>       <li>jurisdiction: the country for which to calculate public domain status. Currently we support:           'austria', 'belgium', 'bulgaria', 'cyprus', 'czech', 'denmark', 'estonia', 'finland', 'france', 'germany',           'greece', 'hungary', 'iceland', 'ireland', 'italy', 'latvia', 'lithuania', 'luxembourg', 'malta', 'netherlands', 'norway', 'poland', 'portugal', 'romania', 'slovakia', 'spain', 'sweden', 'switzerland', 'uk'.        </li>       <li>work: details of the work to perform the calculation for (in json or rdf format).</li>     </ul>      <p>The return data will be a dictionary in JSON format with the output from the pdcalc reasoner.</p>     <p>It is also permissible to provide a callback parameter for JSONP support.</p>      <p><strong>Example query</strong></p>     <p><a       href='/api/pd?{{example_query}}'>/api/pd?{{example_query}}</a></p>      <h3>PD Status Result</h3>     <pre class=\"well\">     {       \"output\": \"The PDCalc reasoner output string...\",       \"work\": A JSON string of the input used,       \"error: \"Error messages from the reasoner\"      }     </pre> ",
+			"icon":"cogs"
+			},
+		"privacy":{
+			"title":"Privacy",
+			"type":"page",
+			"content":"",
+			"area":"right",
+			"icon":"eye"
+			},
+		"contact":{
+			"title":"Contattaci!",
+			"type":"link",
+			"area":"right",
+			"content":"https://okfn.org/contact/",
+			"icon":"edit"
+			}
+	}
+}
