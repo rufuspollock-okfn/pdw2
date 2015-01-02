@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}{% if page is defined %}
+              {{page.title}}
+            {% else %}
+              {{context.title}}
+            {% endif %}{% endblock %}
+  {% block content %}<div class="container">{{page.content|safe}}</div>{% endblock %}

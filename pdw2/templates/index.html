@@ -3,7 +3,7 @@
 
 {% block content %}
  
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+
 {% raw %}
 <script id="error" type="text/html">
   <div class="alert alert-danger col-xs-12">
@@ -31,6 +31,11 @@
 	  {{answer}}
   </div>
 </script>
+<script id="context" type="text/html">
+	<div class="alert alert-info">
+	    <div>Public Domain from: {{data.fromdate}} or {{data.fromyear}}</div>
+	</div>
+</script>
 <script id="response" type="text/html">
 	  	<div class="col-xs-3 alert alert-{{#result}}success{{/result}}{{^result}}danger{{/result}}"><center><strong>
 	  		{{#result}}<i class="fa fa-check fa-4x"></i>{{/result}}
@@ -38,16 +43,31 @@
 	  	</strong></center></div>
 		<div class="col-xs-8 col-md-offset-1">{{response}}</div>
 </script>
+<script id="searchresult" type="text/html">
+	<hr style="clear:both;" />
+	<div class="result-row" >
+		<div class="col-xs-10">
+			<i class="fa fa-user fa-fw"></i><span class="author">{{author}}</span> <br/> 
+			<i class="fa fa-file fa-fw"></i><span class="artwork">{{title}}</span>
+		</div>
+
+		<button class="btn btn-success pull-right col-xs-2 calc" title="Calculate!" data-rdf="{{rdf}}"><i class="fa fa-gears fa-fw" ></i></button>
+	</div>
+</script>
 {% endraw %} 
 <script src="https://rawgithub.com/HenrikJoreteg/ICanHaz.js/master/ICanHaz.min.js"></script>
 <script>
 PDC = {};
-PDC.server = "http://gitsign.com:8001/api";
+PDC.server = "http://publicdomainworks.net/api";
+PDC.root = "http://publicdomainworks.net";
+
 $(function(){
 	PDC.showresult = function(data) {
-		console.log(data);
-//		data.error = "";
-//		data.output = [{"type": "question", "question": "Into which of the following categories does the examined item fall? (1)", "id": "n0"}, {"type": "evaluation", "evaluation": "First fixation of a film (3) (4)"}, {"query": "prefix bnf-onto: <http://data.bnf.fr/ontology/bnf-onto/> ASK { ?x bnf-onto:subject \"Audiovisuel\"}", "type":"query"}, {"answer": "First fixation of a film (3) (4)", "type": "answer"}, {"type": "question", "question": "Was the film published or communicated to the public within 50 years from the fixation?", "id": "n1"}, {"query": "prefix dc: <http://purl.org/dc/terms/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> ASK { {  ?a dc:date ?b.  FILTER (year(xsd:dateTime(?b)) +50 < year(now()) )  } }", "type": "query"}, {"answer": "No", "type": "answer"}, {"type": "question", "question": "Was the film first fixated more than 50 years ago?", "id": "n5"}, {"query": "prefix dc: <http://purl.org/dc/terms/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> ASK { {  ?a dc:date ?b.  FILTER (year(xsd:dateTime(?b)) +50 < year(now()) )  } }", "type": "query"}, {"answer": "No", "type": "answer"}, {"type": "response", "response": "The related right of the producer of the film producer in the first fixation of the film has not expired. Please contact the right-holder before use.", "result": false}];
+		// console.log(data);
+		// data.error = "";
+		// data.output = data_templ[$('#detail').val()];
+		
+        $("#resultmodal").modal();
         $('#results').empty();
 
         if (data.output == "" && data.error != ""){
@@ -60,103 +80,257 @@ $(function(){
         }
     }
 
-	$('#submit').on('click',function(){
-		$.getJSON(PDC.server+'/pd',{
+
+	PDC.queryresults = function(data) {
+	//	console.log(data);
+		$('#search-results').empty();
+
+		if(data.output == "" && data.error != "") {
+			console.log(error);
+		} else{
+         //       	console.log(data[2])
+			for (var s in data){
+				step = data[s];
+				$('#search-results').append(ich.searchresult(step));
+			}
+		}
+	}
+
+	$('#submit').on('click', calculate);
+	$(document).on('click', '.calc', function(){
+		$('#work').val($(this).data('rdf'));
+		calculate();
+	});
+
+
+	function calculate() {
+		console.log("calculating...");
+		console.log("work" + $('#work').val());
+		console.log("icon" + $(this).data('rdf'));
+		console.log($(this).data('rdf') || $('#work').val());
+		
+		$.ajax({
+			"url":PDC.server+'/pd',
+			"data":{
 				"jurisdiction": $('#jurisdiction').val(),
-				work:$('#work').val(),
-				detail:$('#detail').val()
-			},PDC.showresult);
-	});
-	$.getJSON(PDC.server+'/jurisdictions', function(data){
-		$(data.valid).each(function(e,i){
-			$('#jurisdiction').append('<option value="'+i+'">'+i+'</option>');
+				"flavour": $('#flavour').val(),
+				"work":$(this).data('rdf') || $('#work').val(),
+				"detail":$('#detail').val()
+			},
+			"success": PDC.showresult,
+			"dataType":"json",
+			"timeout":30000,
+			"error":PDC.showresult
 		});
-		$('.sample_url').on('click', function(){
-			$('#work').val($(this).data('url'));
-			$('#jurisdiction').val($(this).data('jurisdiction'));
+	};
+
+	$.getJSON('/api/jurisdictions', function(data){
+		for(var k in data.valid){
+			$('#jurisdiction').append('<option value="'+data.valid[k]+'">'+k+'</option>');
+		}
+		
+	});
+
+	$.getJSON('/api/flavours', function(data){
+		for(var k in data.valid){
+			$('#flavour').append('<option value="'+data.valid[k]+'">'+k+'</option>');
+		}
+	});
+
+	$('.sample_url').on('click', function(){
+		$('#work').val($(this).data('url'));
+		$('#jurisdiction').val($(this).data('jurisdiction'));
+		$('#flavour').val($(this).data('flavour'));
+	});
+
+	$('#search').on('click', function() {
+		console.log( $('#query').val() );
+		$.ajax({
+			"url":PDC.root+'/list',
+			"data":{
+				"author": $('#query-author').val(),
+				"work": $('#query-work').val()
+			},
+			"success": PDC.queryresults,
+			"dataType":"json",
+			"timeout":30000,
+			"error":PDC.queryresults
 		});
 	});
+
+/*	$.getJSON('/list', function(data) {
+		console.log('yooo' + data.valid);
+		$(data).each(function(e,i) {
+			console.log(i); 
+			$('#search-results').append("yeyeyey");
+			$('#search-results').append(i+'<br>');
+		});
+	}); 
+*/
 });
+
 </script>
 <section>
-    <h2>Welcome!</h2>
+<!--    <h2>Welcome!</h2>
 	<div class="primary col-xs-5" >
 		<p>
 		Public Domain Works is a repository of works that have entered the public domain. You can search for works that are in the public domain in any given jurisdiction, or browse public domain works by categories. Public Domain Works is powered by the <a href="http://publicdomain.okfn.org/calculators">Public Domain Calculators</a>, a tool that determines the public domain status of a work based on bibliographic metadata<br/>
 		</p>
         <p>Public Domain Works also provides a web <a href="http://publicdomainworks.net/api">API</a> for calculating public domain status of works.</p>
-	</div>
-	<div class="secondary col-xs-5 col-md-offset-2">
-		<p>Try the public domain calculators:</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-globe fa-fw"></i>Select your jurdisdiction:</span>
-			<select name="jurisdiction" id="jurisdiction" class="col-xs-6">
-			<!--<option>austria</option>
-			<option>belgium</option>
-			<option>bulgaria</option>
-			<option>cyprus</option>
-			<option>czech</option>
-			<option>denmark</option>
-			<option>estonia</option>
-			<option>finland</option>
-			<option>france</option>
-			<option>germany</option>
-			<option>greece</option>
-			<option>hungary</option>
-			<option>iceland</option>
-			<option>ireland</option>
-			<option>italy</option>
-			<option>latvia</option>
-			<option>lithuania</option>
-			<option>luxembourg</option>
-			<option>malta</option>
-			<option>netherlands</option>
-			<option>norway</option>
-			<option>poland</option>
-			<option>portugal</option>
-			<option>romania</option>
-			<option>slovakia</option>
-			<option>spain</option>
-			<option>sweden</option>
-			<option>switzerland</option>
-			<option>uk</option>-->
-			</select>
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-link fa-fw"></i>Paste your metadata url:</span>
-			<input type="text" name="work" id="work" class="col-xs-6">
-			<!--<select name="number" id="number">
-			<option>2</option>
-			<option>3</option>
-			<option>4</option>
-			<option>5</option>
-			<option>6</option>
-			<option>7</option>
-			<option>8</option>
-			<option>9</option>
-			<option>10</option>
-			</select>-->
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-question fa-fw"></i>Sample data urls:</span>
-			<a class="sample_url" data-url="http://data.bnf.fr/15533097/2046___film/rdf.xml" data-jurisdiction="france/bnf">2046 - Wong Kar Wai - Bnf France</a>
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-signal fa-fw"></i>Select detail level:</span>
-			<select name="detail" id="detail" class="col-xs-6">
-				<option value="low" >low</option>
-				<option value="medium">medium</option>
-				<option value="high">high</option>
-			</select>
-		</p>
-		<p class="row">
-			<button type="button" name="submit" value="Calculate!" id="submit" class="btn btn-info col-xs-12" >Calculate!</button>
-		</p>
+	<hr/>
+	<div id="search-query">
+		 <div class="row">
+                        <span class="col-xs-6"><i class="fa fa-link fa-fw"></i>Search for an author:</span>
+                        <input type="text" name="query-author" id="query-author" class="col-xs-6">
+						<span class="col-xs-6"><i class="fa fa-link fa-fw"></i>Search for a work:</span>
+						<input type="text" name="query-work" id="query-work" class="col-xs-6">
+		</div>
 		<div class="row">
-			The calculation results as follows:
+                        <button type="button" name="search" value="Search" id="search" class="btn btn-info col-xs-12"><i class="fa fa-search fa-fw"></i>Search</button>
+                </div>
+	</div>
+	<div id="search-results">
+	</div>
+
+	</div>
+-->
+	
+	<div class="row dark">
+	<div class="container">
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="jurisdiction">Select your jurdisdiction:</label>
+			<div class="input-group">
+			<div class="input-group-addon"><i class="fa fa-globe fa-fw" title="Select your jurisdiction"></i></div>
+			
+			<select class="form-control" name="jurisdiction" id="jurisdiction">
+				
+			</select>
+			</div>
 		</div>
-		<div id="results" class="well row">
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="flavour">Select your flavour:</label>
+			<div class="input-group">
+				<div class="input-group-addon"> <i class="fa fa-spoon fa-fw" title="Select your flavour"></i>
+				</div>
+				<select  name="flavour" id="flavour" class="form-control">
+				
+			</select>
+			</div>
+		</div>
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="work">Paste your metadata url:</label>
+			<div class="input-group">
+				<div class="input-group-addon"><i class="fa fa-link fa-fw"></i></div>
+			<input type="text" name="work" id="work" class="form-control">
+			</div>
+		</div>
+		
+		<div class="form-group col-lg-2">
+			<label class="sr-only" for="work"> <i class="fa fa-signal fa-fw"></i>Select detail level:</label>
+			<div class="input-group">
+				<div class="input-group-addon"><i class="fa fa-signal fa-fw"></i></div>
+				<select name="detail" id="detail" class="form-control">
+					<option value="low" >low</option>
+					<option value="medium">medium</option>
+					<option value="high">high</option>
+				</select>
+			</div>
+		</div>
+
+
+
+		<div class="form-group col-lg-2">
+			<div class="dropdown">
+			  <button class="col-xs-12 btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+			    Samples
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			    <li role="presentation"><a class="sample_url" data-url="http://data.bnf.fr/15533097/2046___film/rdf.xml" data-jurisdiction="france" data-flavour="bnf">2046 - Wong Kar Wai - Bnf France</a></li>
+			  </ul>
+			</div>
+		</div>
+
+		<div class="form-group col-lg-2">
+			<button type="button" name="submit" value="Calculate!" id="submit" class="btn btn-success col-xs-12" ><i class="fa fa-gears fa-fw"></i>Calculate!</button>
+
+			<div class="modal fade" id="resultmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Calculation Results</h4>
+      </div>
+	  <div class="modal-body">
+	    <div id="results" class="well row"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 		</div>
 	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </section>
+
+<div id="artworks" class="carousel slide " data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+
+
+	{% for artwork in context.artworks %}
+	<div class="item artwork {%if loop.index == 1%} active{%endif%}" data-url="{{artwork.url}}">
+		<img src="{{artwork.url}}">
+      <div class="carousel-caption">
+		<div class=" col-lg-offset-1 "><span class="artwork-title">{{artwork.title}}</span></div>
+		<div class=" col-lg-offset-1 "><span class="artwork-text"><a href="{{artwork.link}}">{{artwork.text}}</a></span></div>
+      </div>
+
+		
+	</div>
+	{% endfor %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="fa fa-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="fa fa-chevron-right"></span>
+  </a>
+</div>
+
+
+
+</div>
 {% endblock %}
