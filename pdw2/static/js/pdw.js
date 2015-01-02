@@ -1,5 +1,1 @@
-jQuery(document).ready(function($) {
 
-
-})
- 

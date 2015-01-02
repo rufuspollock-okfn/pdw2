@@ -1,131 +1,173 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block content %}
- 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-{% raw %}
-<script id="error" type="text/html">
-  <div class="alert alert-danger col-xs-12">
-	  <div><strong>Oh snap!</strong> apparently there was an error:</div>
-	  <pre>{{msg}}</pre>
-  </div>
-</script>
-<script id="question" type="text/html">
-  <div class="alert alert-success col-xs-12">
-	  {{question}}
-  </div>
-</script>
-<script id="evaluation" type="text/html">
-  <div class="alert alert-success col-xs-10 col-md-offset-2">
-	  {{evaluation}}
-  </div>
-</script>
-<script id="query" type="text/html">
-  <div class="alert alert-info col-xs-12">
-	  <pre>{{query}}</pre>
-  </div>
-</script>
-<script id="answer" type="text/html">
-  <div class="alert alert-warning col-xs-12">
-	  {{answer}}
-  </div>
-</script>
-<script id="response" type="text/html">
-	  	<div class="col-xs-3 alert alert-{{#result}}success{{/result}}{{^result}}danger{{/result}}"><center><strong>
-	  		{{#result}}<i class="fa fa-check fa-4x"></i>{{/result}}
-	  		{{^result}}<i class="fa fa-times fa-4x"></i>{{/result}}
-	  	</strong></center></div>
-		<div class="col-xs-8 col-md-offset-1">{{response}}</div>
-</script>
-{% endraw %} 
-<script src="https://rawgithub.com/HenrikJoreteg/ICanHaz.js/master/ICanHaz.min.js"></script>
-<script>
-PDC = {};
-PDC.server = "http://gitsign.com:8001/api";
-$(function(){
-	PDC.showresult = function(data) {
-		console.log(data);
-//		data.error = "";
-//		data.output = [{"type": "question", "question": "Into which of the following categories does the examined item fall? (1)", "id": "n0"}, {"type": "evaluation", "evaluation": "First fixation of a film (3) (4)"}, {"query": "prefix bnf-onto: <http://data.bnf.fr/ontology/bnf-onto/> ASK { ?x bnf-onto:subject \"Audiovisuel\"}", "type":"query"}, {"answer": "First fixation of a film (3) (4)", "type": "answer"}, {"type": "question", "question": "Was the film published or communicated to the public within 50 years from the fixation?", "id": "n1"}, {"query": "prefix dc: <http://purl.org/dc/terms/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> ASK { {  ?a dc:date ?b.  FILTER (year(xsd:dateTime(?b)) +50 < year(now()) )  } }", "type": "query"}, {"answer": "No", "type": "answer"}, {"type": "question", "question": "Was the film first fixated more than 50 years ago?", "id": "n5"}, {"query": "prefix dc: <http://purl.org/dc/terms/> prefix xsd: <http://www.w3.org/2001/XMLSchema#> ASK { {  ?a dc:date ?b.  FILTER (year(xsd:dateTime(?b)) +50 < year(now()) )  } }", "type": "query"}, {"answer": "No", "type": "answer"}, {"type": "response", "response": "The related right of the producer of the film producer in the first fixation of the film has not expired. Please contact the right-holder before use.", "result": false}];
-        $('#results').empty();
 
-        if (data.output == "" && data.error != ""){
-        	$('#results').append(ich.error({msg:data.error}))
-        }else{
-        	for (var s in data.output){
-        		step = data.output[s];
-        		ich[step.type](step).appendTo('#results');
-        	}
-        }
-    }
+      {%raw%}
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-	$('#submit').on('click',function(){
-		$.getJSON(PDC.server+'/pd',{
-				"jurisdiction": $('#jurisdiction').val(),
-				work:$('#work').val(),
-				detail:$('#detail').val()
-			},PDC.showresult);
-	});
-	$.getJSON(PDC.server+'/jurisdictions', function(data){
-		$(data.valid).each(function(e,i){
-			$('#jurisdiction').append('<option value="'+i+'">'+i+'</option>');
-		});
-		$('.sample_url').on('click', function(){
-			$('#work').val($(this).data('url'));
-			$('#jurisdiction').val($(this).data('jurisdiction'));
-		});
-	});
-});
-</script>
-<section>
-    <h2>Bienvenue!</h2>
-	<div class="primary col-xs-5" >
-		<p>
-		Les calculateurs du domaine public visent à faciliter la compréhension du statut juridique d’une oeuvre et établir, pour un pays donné, si elle déjà est dans le domaine public. La connaissance du statut juridique des oeuvres ou de leurs copies numériques est primordiale au développement de nouveaux services qui réutilisent et valorisent le domaine public.</p>
-		nouveaux services qui réutilisent et valorisent le domaine public.<br/></p>
-<iframe src="//player.vimeo.com/video/78740619" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-	</div>
-	<div class="secondary col-xs-5 col-md-offset-2">
-		<p>Essayer le calculateur:</p>
-		<p class="row">
-			<input type="hidden" name="jurisdiction" id="jurisdiction" class="col-xs-6" value="france/BNF">
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-link fa-fw"></i>Coller les métadonnées bibiographiques ici:</span>
-			<input type="text" name="work" id="work" class="col-xs-6">
-			<!--<select name="number" id="number">
-			<option>2</option>
-			<option>3</option>
-			<option>4</option>
-			<option>5</option>
-			<option>6</option>
-			<option>7</option>
-			<option>8</option>
-			<option>9</option>
-			<option>10</option>
-			</select>-->
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-question fa-fw"></i>Example de métadonnées:</span>
-			<a class="sample_url" data-url="http://data.bnf.fr/15533097/2046___film/rdf.xml" data-jurisdiction="france/bnf">2046 - Wong Kar Wai - Bnf France</a>
-		</p>
-		<p class="row">
-			<span class="col-xs-6"> <i class="fa fa-signal fa-fw"></i>Sélectionnez le niveau de details pour la réponse:</span>
-			<select name="detail" id="detail" class="col-xs-6">
-				<option value="low" >faible</option>
-				<option value="medium">moyen</option>
-				<option value="high">élevés</option>
-			</select>
-		</p>
-		<p class="row">
-			<button type="button" name="submit" value="Calculate!" id="submit" class="btn btn-info col-xs-12" >Calculer!</button>
-		</p>
-		<div class="row">
-			Résultats:
-		</div>
-		<div id="results" class="well row">
-		</div>
-	</div>
-</section>
+        ga('create', 'UA-48138124-1', 'calculateurdomainepublic.fr');
+        ga('send', 'pageview');
+
+      </script>
+        <script id="error" type="text/html">
+          <div class="alert alert-danger col-xs-12">
+            <div><strong>Oh mince!</strong>Apparement il y a eu une erreur</div>
+            <pre>{{msg}}</pre>
+          </div>
+        </script>
+
+        <script id="question" type="text/html">
+          <div class="alert alert-info col-xs-12">
+            {{question}}
+          </div>
+        </script>
+
+        <script id="evaluation" type="text/html">
+          <div class="alert alert-warning col-xs-10 col-md-offset-2">
+            {{evaluation}}
+          </div>
+        </script>
+
+        <script id="context" type="text/html">
+          <div class="alert alert-info col-xs-12">
+          </div>
+        </script>
+        <script id="query" type="text/html">
+          <div class="alert alert-dismissable col-xs-12">
+            <pre>{{query}}</pre>
+          </div>
+        </script>
+        <script id="answer" type="text/html">
+          <div class="alert alert-dismissable col-xs-12">
+            {{answer}}
+          </div>
+        </script>
+
+        <script id="response" type="text/html">
+            <div class="col-xs-8" id="results-work">
+              <i class="fa fa-user fa-fw"></i><span id="author-result" class="author">{{author}}</span><br/>
+              <i class="fa fa-file fa-fw"></i><span id="artwork-result" class="artwork">{{title}}</span>
+            </div>
+              <div class="col-xs-3 alert alert-{{#result}}success{{/result}}{{^result}}danger{{/result}}" id="alert-result-button"><center><strong>
+                {{#result}}<i class="fa fa-check fa-2x"></i>{{/result}}
+                {{^result}}<i class="fa fa-times fa-2x"></i>{{/result}}
+              </strong></center></div>
+          <div class="col-xs-12 alert alert-{{#result}}success {{/result}}{{^result}}danger {{/result}} col-md-offset-1" id="alert-result-description" >{{response}}</div>
+          <hr style="clear:both;"/>
+        </script>
+
+        <script id="searchresult" type="text/html">
+       
+          
+          <div class="result-row" >
+            <div class="col-xs-10">
+              <i class="fa fa-user fa-fw"></i><span class="author">{{author}}</span><br/>
+              <i class="fa fa-file fa-fw"></i><span class="artwork">{{title}}</span>
+            </div>
+
+            <a name="submit" id="submit" href="#"><button class="btn btn-info pull-right col-xs-2 calc" title="Calculer" data-rdf="{{rdf}}" data-toggle="modal" data-target="#calculate-result" data-author="{{author}}" data-title="{{title}}"><i class="fa fa-gears fa-fw" ></i> Calculer</button>
+            </a>
+	       </div>
+	   </script>
+      {%endraw%}
+      
+<div class="banner">
+  <div class="row">
+     	<div class="col-md-1"></div>
+		 <div  class="col-md-11">
+<h2><span>Utiliser les <a href="/donnees">métadonnées bibliographiques</a> des <a href="/institutions">établissements culturels</a></br>pour identifier, explorer et valoriser les œuvres du <a href="/domainepublic">domaine public</a></span></h2>
+
+	   </div>
+     <div class="col-md-2"></div>
+</div>
+
+
+<div class="row searchheader">
+    <div class="col-md-1"></div>
+   <div class="col-md-8"><h4 style="float:left">Chercher dans le catalogue de la BnF</h4><h4 style="float:left; margin-left:40px;"><a href="/example">Auteurs pendant la première guerre mondiale</a></h4></div>
+   <div class="col-md-3"></div>
+ </div>
+</div>
+
+      <div class="row searchbar" id="search-query">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+          <form class="form-inline" role="form">
+              <input type="text" class="searchinput form-control" name="query-author" id="query-author" placeholder="auteur">
+              <input type="text" class="searchinput form-control" name="query-work" id="query-work" placeholder="œuvre">
+              <button type="button" name="search" value="Search" id="searchbutton" class="btn btn-info col-md-2 searchbutton" data-loading-text="Chargement..."><i class="fa fa-search fa-fw"></i>Chercher</button>
+              <select class="form-control searchjurisdiction" style="visibility:hidden" name="jurisdiction" id="jurisdiction" class="col-xs-6">
+                  <option value="france/bnf">France</option>
+                  <option value="Royaume-Uni">Royaume-Uni</option>
+                  <option value="Pays-Bas">Pays-Bas</option>
+                  <option value="Allemagne">Allemagne</option>
+              </select>
+          </form>
+	  </div>
+      </div>
+
+   <div class="modal fade" id="calculate-result" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Résultat du calculateur</h4>
+      </div>
+      <div class="modal-body" id="results">
+      </div>
+    </div>
+  </div>
+</div>
+
+     <div class="row search-result" id="search-result">
+        <div class="col-md-1"></div>
+            <div class="col-md-6" id="search-results"></div>
+	   </div>
+
+  <div id="carousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+     <div class="item active">
+      <img src="/static/img/Levinus.jpg" alt="...">
+      <div class="carousel-caption">
+       <h2><span>Cartographier le domaine public</span></h2>
+        <p><span><a href="/domainepublic" style="color:#ffffff;" role="button">Identifier les œuvres entrées dans le domaine public</a></span></p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="/static/img/8th_August_1918_.jpg" alt="...">
+      <div class="carousel-caption">
+       <h2><span>Valoriser le domaine public</span></h2>
+        <p><span><a href="http://laderdesders.fr/" style="color:#ffffff;" role="button" target="_blank">Explorer les images d'archives sur le site de la Der des Ders projet lauréat du hackathon Dataculture du ministère de la Culture et de la Communication</a></span></p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="/static/img/BNF.jpg" alt="...">
+      <div class="carousel-caption">
+       <h2><span>La Bibliothèque nationale de France ouvre ses métadonnées bibliographiques</span></h2>
+        <p><span><a href="http://www.bnf.fr/fr/professionnels/recuperation_donnees_bnf.html" style="color:#ffffff;" role="button" target="_blank">Valoriser les données publiques culturelles</a></span></p>
+      </div>
+    </div>
+  </div>
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+
 {% endblock %}

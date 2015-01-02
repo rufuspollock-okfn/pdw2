@@ -1,4 +1,3 @@
-
 import os
 
 #set path to real path
@@ -14,4 +13,3 @@ sys.path.insert(0, os.path.join(base_path, "pdw2"))
 
 #go!!
 from pdw2.web import app as application
-
